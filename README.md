@@ -23,15 +23,15 @@ MATLAB:
 
   pupil-MATLAB:
   
-    mypupildetection2023.m: pupil detection;first select the pupil area and then the background area (whole image or area close to the pupil)
+  mypupildetection2023.m: pupil detection;first select the pupil area and then the background area (whole image or area close to the pupil)
     
-    pupil_anal.m: pupil feature extraction
+  pupil_anal.m: pupil feature extraction
     
-    pupilout_trail: export the PLR feature for PLR-fMRI analysis 
+  pupilout_trail: export the PLR feature for PLR-fMRI analysis 
     
   network-MATLAB:
   
-    connect3d.m: correlation network analysis using the ROIs detected from the PLR-fMRI analysis
+  connect3d.m: correlation network analysis using the ROIs detected from the PLR-fMRI analysis
 
-    allnet.m:correlation network analysis using the ROIs based on Allen brain atlas
+  allnet.m:correlation network analysis using the ROIs based on Allen brain atlas
 
