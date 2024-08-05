@@ -1,0 +1,1436 @@
+#!/bin/tcsh
+
+# This script is meant to help review single subject results.
+#
+# This script should be run from a '.results' directory produced by an
+# afni_proc.py processing script.
+#
+# It generates an HTML file of useful QC information (images + text) of the
+# data throughout its processing. Results for this subject are stored in
+# 'QC_allMice.average.stim' and may be viewed using an standard browser,
+# e.g.:
+#
+#     afni_open -b QC_allMice.average.stim/index.html
+#
+#     firefox QC_allMice.average.stim/index.html
+#
+# The script can be re-run. Variables are defined in the 'Top level' section
+# and used throughout, but otherwise the script is modular. individual
+# sections can be run with or without modification (e.g., copying them into
+# a new file), as long as the 'Top level' sections are all present.
+
+# This script was created with this command:
+#    apqc_make_tcsh.py                                                   \
+#        -review_style  pythonic                                         \
+#        -subj_dir      .                                                \
+#        -uvar_json     out.ss_review_uvars.json
+
+# +* WARNING: The user asked for 'pythonic' APQC, but there are missing
+# dependencies. This APQC run was therefore downgraded to 'basic'.
+# -> To fix: Please check the warnings in out.review_html, but likely
+# Matplotlib is missing or has version<2.2. You can add this dependency
+# (verify with 'afni_system_check.py -check_all') and redo the APQC
+# pythonically.
+
+# ================== Top level: file names and global vars ===================
+
+set subj             = allMice.average.stim
+set afni_ver         = AFNI_23.0.02
+set afni_package     = linux_centos_7_64
+set nt_orig          = 205
+set nt_applied       = 205
+set tr               = 2.0
+set rm_trs           = 0
+set num_stim         = 1
+set tcat_dset        = pb00.allMice.average.stim.r01.tcat+orig.HEAD
+set enorm_dset       = motion_allMice.average.stim_enorm.1D
+set motion_dset      = dfile_rall.1D
+set volreg_dset      = pb02.allMice.average.stim.r01.volreg+orig.HEAD
+set outlier_dset     = outcount_rall.1D
+set gcor_dset        = out.gcor.1D
+set mask_corr_dset   = out.mask_ae_dice.txt
+set mot_limit        = 0.3
+set xmat_regress     = X.xmat.1D
+set xmat_stim        = X.stim.xmat.1D
+set stats_dset       = stats.allMice.average.stim+orig.HEAD
+set sum_ideal        = sum_ideal.1D
+set copy_anat        = ambmc_ori_100+orig.HEAD
+set final_anat       = anat_final.allMice.average.stim+orig.HEAD
+set vr_base_dset     = vr_base+orig.HEAD
+set final_epi_dset   = vr_base+orig.HEAD
+set final_view       = orig
+set mask_dset        = mask_import_100mask+orig.HEAD
+set tsnr_dset        = TSNR.allMice.average.stim+orig.HEAD
+set errts_dset       = errts.allMice.average.stim+orig.HEAD
+set ss_review_dset   = out.ss_review.allMice.average.stim.txt
+set df_info_dset     = out.df_info.txt
+set cormat_warn_dset = out.cormat_warn.txt
+set pre_ss_warn_dset = out.pre_ss_warn.txt
+set vlines_tcat_dir  = vlines.pb00.tcat
+
+
+# ================ Top level: make output directory structure ================
+
+# pretty self explanatory
+
+set odir_qc   = QC_${subj}
+set odir_img  = ${odir_qc}/media
+set odir_info = ${odir_qc}/extra_info
+
+\mkdir -p ${odir_img}
+\mkdir -p ${odir_info}
+
+
+# ======================== Top level: find main dset =========================
+# Find the main dset, mostly for ulay functionality,
+# in descending order of preference:
+# template, anat_final, vr_base.
+
+# use anat_final as main dset
+set main_dset = "${final_anat}"
+
+set main_dset_sp = `3dinfo -space ${main_dset}`                             
+
+
+# ========================== Top level: censor info ==========================
+
+# Check the censoring
+
+# No censoring: nothing to calculate
+
+set rep_cen_str    = "(no censoring applied)"
+set addtxt_cen_str = ""
+
+set cen_have_mot = 0
+set ytop_mot     = ''
+
+set cen_have_out = 0
+set ytop_out     = ''
+
+set cen_color       = ''
+set cen_hline_color = ''
+set cen_cmd         = ''
+set cen_lim_out     = ''
+set cen_lim_mot     = ''
+set cen_lim_all     = ''
+set cen_lim_out_yax = ''
+set cen_lim_mot_yax = ''
+
+
+# ================== Top level: sundry pieces for multi-use ==================
+
+# Setup sundry useful bits of info
+
+set ssrev_ln = `grep "num TRs per run" ${ss_review_dset} | grep -v "("`
+set pats     = "${ssrev_ln[6-]}"
+
+
+# ========================= title of html page: subj =========================
+
+# subject ID for html page title
+
+set opref  = __page_title
+set tjson  = _tmp.txt
+set ojson  = ${odir_img}/${opref}.json
+
+cat << EOF >! ${tjson}
+itemtype    :: TITLE
+itemid      :: pagetop
+blockid     :: Top
+blockid_hov :: Top of page for:&#10  ${subj}
+title       :: afni_proc.py single subject report
+subj        :: "${subj}"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+# ============================ EPI in orig space =============================
+
+# Check the quality of acquired EPI in orig space (ulay) 98 %ile topval for
+# pbar
+
+set opref     = qc_00_vorig_EPI
+set ulay      = "${vr_base_dset}"
+set ulay_name = `3dinfo -prefix ${vr_base_dset}`
+set ulay_ob   = `3dinfo -obliquity ${vr_base_dset}`
+set tjson     = _tmp.txt
+set ojson     = ${odir_img}/${opref}.axi.json
+set tjson2    = _tmp2.txt
+set ojson2    = ${odir_img}/${opref}.sag.json
+set opbarrt   = ${odir_img}/${opref}.pbar
+
+set minmax = `3dBrickStat                                                    \
+    -slow                                                                    \
+    -min -max                                                                \
+    ${ulay}`                                                                
+
+set pp = `3dBrickStat                                                        \
+    -slow                                                                    \
+    -percentile 98 1 98                                                      \
+    ${ulay}`                                                                
+
+set olay_topval = ${pp[2]}
+set olay_botval = 0
+
+@chauffeur_afni                                                              \
+    -ulay    ${ulay}                                                         \
+    -olay    ${ulay}                                                         \
+    -ulay_range_nz 0 ${olay_topval}                                          \
+    -func_range ${olay_topval}                                               \
+    -box_focus_slices AMASK_FOCUS_ULAY                                       \
+    -cbar gray_scale                                                         \
+    -pbar_posonly                                                            \
+    -pbar_saveim "${opbarrt}.jpg"                                            \
+    -pbar_comm_range "98%ile in vol"                                         \
+    -pbar_for "dset"                                                         \
+    -prefix      "${odir_img}/${opref}"                                      \
+    -save_ftype JPEG                                                         \
+    -blowup 4                                                                \
+    -opacity 9                                                               \
+    -montx 7 -monty 1                                                        \
+    -montgap 1                                                               \
+    -montcolor 'black'                                                       \
+    -set_xhairs OFF                                                          \
+    -label_mode 1 -label_size 4                                              \
+    -no_cor                                                                  \
+    -do_clean                                                               
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  "${opbarrt}.txt"                                                 \
+    -prefix "${opbarrt}.json"                                               
+
+cat << EOF >! ${tjson}
+itemtype    :: VOL
+itemid      :: EPI
+blockid     :: vorig
+blockid_hov :: vols in orig space
+title       :: Check vols in original space
+text        :: "EPI in original space (volreg base)" ,, "dset: ${ulay_name} (EPI)"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+
+cat << EOF >! ${tjson2}
+itemtype    :: VOL
+itemid      :: EPI
+blockid     :: vorig
+blockid_hov :: vols in orig space
+title       :: Check vols in original space
+subtext     :: "SHOW_PBAR:${opref}.pbar.json" ,, "range: [${minmax[1]}, ${minmax[2]}];  obliquity: ${ulay_ob}"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson2}                                                        \
+    -prefix ${ojson2}                                                       
+
+
+# ============================ anat in orig space ============================
+
+# Check the quality of acquired anat in orig space (ulay) 98 %ile topval for
+# pbar
+
+set opref     = qc_01_vorig_anat
+set ulay      = "${copy_anat}"
+set ulay_name = `3dinfo -prefix ${copy_anat}`
+set ulay_ob   = `3dinfo -obliquity ${copy_anat}`
+set tjson     = _tmp.txt
+set ojson     = ${odir_img}/${opref}.axi.json
+set tjson2    = _tmp2.txt
+set ojson2    = ${odir_img}/${opref}.sag.json
+set opbarrt   = ${odir_img}/${opref}.pbar
+
+set minmax = `3dBrickStat                                                    \
+    -slow                                                                    \
+    -min -max                                                                \
+    ${ulay}`                                                                
+
+set pp = `3dBrickStat                                                        \
+    -slow                                                                    \
+    -percentile 98 1 98                                                      \
+    ${ulay}`                                                                
+
+set olay_topval = ${pp[2]}
+set olay_botval = 0
+
+@chauffeur_afni                                                              \
+    -ulay    ${ulay}                                                         \
+    -olay    ${ulay}                                                         \
+    -ulay_range_nz 0 ${olay_topval}                                          \
+    -func_range ${olay_topval}                                               \
+    -box_focus_slices AMASK_FOCUS_ULAY                                       \
+    -cbar gray_scale                                                         \
+    -pbar_posonly                                                            \
+    -pbar_saveim "${opbarrt}.jpg"                                            \
+    -pbar_comm_range "98%ile in vol"                                         \
+    -pbar_for "dset"                                                         \
+    -prefix      "${odir_img}/${opref}"                                      \
+    -save_ftype JPEG                                                         \
+    -blowup 4                                                                \
+    -opacity 9                                                               \
+    -montx 7 -monty 1                                                        \
+    -montgap 1                                                               \
+    -montcolor 'black'                                                       \
+    -set_xhairs OFF                                                          \
+    -label_mode 1 -label_size 4                                              \
+    -no_cor                                                                  \
+    -do_clean                                                               
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  "${opbarrt}.txt"                                                 \
+    -prefix "${opbarrt}.json"                                               
+
+cat << EOF >! ${tjson}
+itemtype    :: VOL
+itemid      :: anat
+blockid     :: vorig
+blockid_hov :: vols in orig space
+title       :: Check vols in original space
+text        :: "Anatomical in original space" ,, "dset: ${ulay_name} (anat)"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+
+cat << EOF >! ${tjson2}
+itemtype    :: VOL
+itemid      :: anat
+blockid     :: vorig
+blockid_hov :: vols in orig space
+title       :: Check vols in original space
+subtext     :: "SHOW_PBAR:${opref}.pbar.json" ,, "range: [${minmax[1]}, ${minmax[2]}];  obliquity: ${ulay_ob}"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson2}                                                        \
+    -prefix ${ojson2}                                                       
+
+
+# ====================== initial EPI-anatomical overlap ======================
+
+# Check initial overlap between the EPI (ulay) and anatomical (olay):
+# look at gross alignment
+
+set opref     = qc_02_vorig_olap
+set ulay_name = `3dinfo -prefix ${vr_base_dset}`
+set olay_name = `3dinfo -prefix ${copy_anat}`
+set tjson     = _tmp.txt
+set ojson     = ${odir_img}/${opref}.sag.json
+set tjson2    = _tmp2.txt
+set ojson2    = ${odir_img}/${opref}.sag_DEOB.json
+
+@djunct_overlap_check                                                        \
+    -ulay       ${copy_anat}                                                 \
+    -olay       ${vr_base_dset}                                              \
+    -box_focus_slices AMASK_FOCUS_ULAY                                       \
+    -opacity    4                                                            \
+    -no_cor                                                                  \
+    -no_axi                                                                  \
+    -montx_cat  1                                                            \
+    -monty_cat  1                                                            \
+    -montx      7                                                            \
+    -prefix  ${odir_img}/${opref}.sag  # bc of quirk of program oname       
+
+# rename this file: won't be in QC, but can be viewed, if desired
+if ( -e ${odir_img}/${opref}.sag_DEOB.txt ) then
+    \mv ${odir_img}/${opref}.sag_DEOB.txt       \
+         ${odir_img}/${opref}.sag_DEOB.txt_info
+endif
+
+cat << EOF >! ${tjson}
+itemtype    :: VOL
+itemid      :: olap
+blockid     :: vorig
+blockid_hov :: vols in orig space
+title       :: Check vols in original space
+text        :: "Initial overlap, no obliquity: anat (ulay) and EPI (olay)"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+
+cat << EOF >! ${tjson2}
+itemtype    :: VOL
+itemid      :: olap
+blockid     :: vorig
+blockid_hov :: vols in orig space
+title       :: Check vols in original space
+text        :: "Initial overlap, applying obliquity: anat (ulay) and EPI (olay)"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson2}                                                        \
+    -prefix ${ojson2}                                                       
+
+
+# ======================= EPI and anatomical alignment =======================
+
+# Compare the quality of alignment between the EPI (ulay) and edge-ified
+# anatomical (olay):
+# look at gross alignment
+# follow ventricles and gyral patterns
+
+set opref     = qc_03_ve2a_epi2anat
+set focus_box = ${main_dset}
+set ulay_name = `3dinfo -prefix ${final_epi_dset}`
+set olay_name = `3dinfo -prefix ${final_anat}`
+set tjson     = _tmp.txt
+set ojson     = ${odir_img}/${opref}.axi.json
+set tjson2    = _tmp2.txt
+set ojson2    = ${odir_img}/${opref}.sag.json
+
+@djunct_edgy_align_check                                                     \
+    -olay              ${final_anat}                                         \
+    -box_focus_slices  ${focus_box}                                          \
+    -ulay              ${final_epi_dset}                                     \
+    -use_olay_grid     wsinc5                                                \
+    -ulay_range_am     "1%" "95%"                                            \
+    -ulay_min_fac      0.2                                                   \
+    -no_cor                                                                  \
+    -prefix  ${odir_img}/${opref}                                           
+
+cat << EOF >! ${tjson}
+itemtype    :: VOL
+itemid      :: epi2anat
+blockid     :: ve2a
+blockid_hov :: vol alignment (EPI-anat)
+title       :: Check vol alignment (EPI to anat)
+text        :: "ulay: ${ulay_name} (EPI)" ,, "olay: ${olay_name} (anat edges)"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+
+cat << EOF >! ${tjson2}
+itemtype    :: VOL
+itemid      :: epi2anat
+blockid     :: ve2a
+blockid_hov :: vol alignment (EPI-anat)
+title       :: Check vol alignment (EPI to anat)
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson2}                                                        \
+    -prefix ${ojson2}                                                       
+
+
+# ========================== EPI mask on final anat ==========================
+
+# See how the EPI mask dset overlays the template
+
+set opref     = qc_04_ve2a_mask2final
+set focus_box = ${main_dset}
+set ulay_dset = ${main_dset}
+set ulay_name = `3dinfo -prefix ${main_dset}`
+set olay_name = `3dinfo -prefix ${mask_dset}`
+set tjson     = _tmp.txt
+set ojson     = ${odir_img}/${opref}.axi.json
+set tjson2    = _tmp2.txt
+set ojson2    = ${odir_img}/${opref}.sag.json
+
+@chauffeur_afni                                                              \
+    -ulay  ${ulay_dset}                                                      \
+    -box_focus_slices ${focus_box}                                           \
+    -olay  ${mask_dset}                                                      \
+    -cbar Reds_and_Blues_Inv                                                 \
+    -ulay_range 0% 120%                                                      \
+    -func_range 1                                                            \
+    -olay_alpha No                                                           \
+    -olay_boxed No                                                           \
+    -set_subbricks 0 0 0                                                     \
+    -opacity 4                                                               \
+    -prefix        "${odir_img}/${opref}"                                    \
+    -save_ftype JPEG                                                         \
+    -montx 7 -monty 1                                                        \
+    -montgap 1                                                               \
+    -montcolor 'black'                                                       \
+    -set_xhairs OFF                                                          \
+    -label_mode 1 -label_size 4                                              \
+    -no_cor                                                                  \
+    -do_clean                                                               
+
+cat << EOF >! ${tjson}
+itemtype    :: VOL
+itemid      :: mask2final
+blockid     :: ve2a
+blockid_hov :: vol alignment (EPI-anat)
+title       :: Check vol alignment (EPI to anat)
+text        :: "ulay: ${ulay_name} (final anatomical dset)" ,, "olay: ${olay_name} (final EPI mask coverage)"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+
+cat << EOF >! ${tjson2}
+itemtype    :: VOL
+itemid      :: mask2final
+blockid     :: ve2a
+blockid_hov :: vol alignment (EPI-anat)
+title       :: Check vol alignment (EPI to anat)
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson2}                                                        \
+    -prefix ${ojson2}                                                       
+
+
+# ==================== view stats (+ eff est): Full_Fstat ====================
+
+# peruse statistical results:
+#     thr vol [0]
+#     olay vol [0] for pbar
+
+set opref     = qc_05_vstat_Full_Fstat
+set ulay_dset = ${main_dset}
+set focus_box = ${main_dset}
+set ulay_name = `3dinfo -prefix ${ulay_dset}`
+set olay_name = `3dinfo -prefix ${stats_dset}`
+set avsp      = `3dinfo -av_space ${stats_dset}`
+set olaybrick = 0
+set olaylabel = `3dinfo -label ${stats_dset}"[${olaybrick}]"`
+set thrbrick  = 0
+set thrlabel  = `3dinfo -label ${stats_dset}"[${thrbrick}]"`
+set thr_staux = `3dAttribute BRICK_STATAUX ${stats_dset}"[${thrbrick}]"`
+set thr_dof   = `echo ${thr_staux[4-]}`
+set tjson     = _tmp.txt
+set ojson     = ${odir_img}/${opref}.axi.json
+set tjson2    = _tmp2.txt
+set ojson2    = ${odir_img}/${opref}.sag.json
+set opbarrt   = ${odir_img}/${opref}.pbar
+set tcoef     = __tmp_coef_vol.nii
+
+set tt = `3dBrickStat                                                        \
+    -slow                                                                    \
+    -percentile 90 1 90                                                      \
+    -mask "${mask_dset}"                                                     \
+    ${stats_dset}"[${thrbrick}]"`                                           
+
+set thr_thresh = ${tt[2]}                                                   
+
+set pp = `3dBrickStat                                                        \
+    -slow                                                                    \
+    -percentile 99 1 99                                                      \
+    -mask "${mask_dset}"                                                     \
+    ${stats_dset}"[${olaybrick}]"`                                          
+
+set olay_topval = ${pp[2]}
+set olay_botval = 0
+
+@chauffeur_afni                                                              \
+    -ulay  ${ulay_dset}                                                      \
+    -box_focus_slices ${focus_box}                                           \
+    -olay  ${stats_dset}                                                     \
+    -cbar Plasma                                                             \
+    -pbar_posonly                                                            \
+    -ulay_range 0% 120%                                                      \
+    -func_range ${olay_topval}                                               \
+    -thr_olay ${thr_thresh}                                                  \
+    -olay_alpha Yes                                                          \
+    -olay_boxed Yes                                                          \
+    -set_subbricks 0 ${olaybrick} ${thrbrick}                                \
+    -opacity 9                                                               \
+    -pbar_saveim   "${opbarrt}.jpg"                                          \
+    -pbar_comm_range "99%ile in mask"                                        \
+    -pbar_comm_thr   "90%ile in mask, alpha+boxed on"                        \
+    -prefix        "${odir_img}/${opref}"                                    \
+    -save_ftype JPEG                                                         \
+    -montx 7 -monty 1                                                        \
+    -montgap 1                                                               \
+    -montcolor 'black'                                                       \
+    -set_xhairs OFF                                                          \
+    -label_mode 1 -label_size 4                                              \
+    -no_cor                                                                  \
+    -do_clean                                                               
+
+
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  "${opbarrt}.txt"                                                 \
+    -prefix "${opbarrt}.json"                                               
+
+cat << EOF >! ${tjson}
+itemtype    :: VOL
+itemid      :: Full_Fstat
+blockid     :: vstat
+blockid_hov :: statistics vols
+title       :: Check statistics vols (and effect estimates)
+text        :: "olay: [${olaybrick}] '${olaylabel}' (in ${olay_name})" ,, " thr: [${thrbrick}] '${thrlabel}' (df = ${thr_dof})"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+
+cat << EOF >! ${tjson2}
+itemtype    :: VOL
+itemid      :: Full_Fstat
+blockid     :: vstat
+blockid_hov :: statistics vols
+title       :: Check statistics vols (and effect estimates)
+subtext     :: "SHOW_PBAR:${opref}.pbar.json"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson2}                                                        \
+    -prefix ${ojson2}                                                       
+
+
+# ==================== view stats (+ eff est): vis_0_Coef ====================
+
+# peruse statistical results:
+#     thr vol [2]
+#     olay vol [1] for pbar
+
+set opref     = qc_06_vstat_vis_0_Coef
+set ulay_dset = ${main_dset}
+set focus_box = ${main_dset}
+set ulay_name = `3dinfo -prefix ${ulay_dset}`
+set olay_name = `3dinfo -prefix ${stats_dset}`
+set avsp      = `3dinfo -av_space ${stats_dset}`
+set olaybrick = 1
+set olaylabel = `3dinfo -label ${stats_dset}"[${olaybrick}]"`
+set thrbrick  = 2
+set thrlabel  = `3dinfo -label ${stats_dset}"[${thrbrick}]"`
+set thr_staux = `3dAttribute BRICK_STATAUX ${stats_dset}"[${thrbrick}]"`
+set thr_dof   = `echo ${thr_staux[4-]}`
+set tjson     = _tmp.txt
+set ojson     = ${odir_img}/${opref}.axi.json
+set tjson2    = _tmp2.txt
+set ojson2    = ${odir_img}/${opref}.sag.json
+set opbarrt   = ${odir_img}/${opref}.pbar
+set tcoef     = __tmp_coef_vol.nii
+
+set thr_thresh = `p2dsetstat                                                 \
+    -quiet                                                                   \
+    -inset ${stats_dset}"[${thrlabel}]"                                      \
+    -2sided                                                                  \
+    -pval 0.001`                                                            
+
+3dcalc                                                                       \
+    -a    "${stats_dset}[${olaylabel}]"                                      \
+    -b    "${stats_dset}[${thrlabel}]"                                       \
+    -c    ${mask_dset}                                                       \
+    -expr "abs(a)*step(b-${thr_thresh})*step(c)"                             \
+    -prefix ${tcoef}                                                        
+
+set ppcoef = `3dBrickStat                                                    \
+    -slow                                                                    \
+    -non-zero                                                                \
+    -percentile 99 1 99                                                      \
+    ${tcoef}`                                                               
+
+set olay_topval = ${ppcoef[2]}
+set olay_botval = -${olay_topval}
+
+@chauffeur_afni                                                              \
+    -ulay  ${ulay_dset}                                                      \
+    -box_focus_slices ${focus_box}                                           \
+    -olay  ${stats_dset}                                                     \
+    -cbar Reds_and_Blues_Inv                                                 \
+    -pass                                                                    \
+    -ulay_range 0% 120%                                                      \
+    -func_range ${olay_topval}                                               \
+    -thr_olay ${thr_thresh}                                                  \
+    -olay_alpha Yes                                                          \
+    -olay_boxed Yes                                                          \
+    -set_subbricks 0 ${olaybrick} ${thrbrick}                                \
+    -opacity 9                                                               \
+    -pbar_saveim   "${opbarrt}.jpg"                                          \
+    -pbar_comm_range "99%ile in suprathresh mask voxels"                     \
+    -pbar_comm_thr   "two-sided p=0.001, alpha+boxed on"                     \
+    -prefix        "${odir_img}/${opref}"                                    \
+    -save_ftype JPEG                                                         \
+    -montx 7 -monty 1                                                        \
+    -montgap 1                                                               \
+    -montcolor 'black'                                                       \
+    -set_xhairs OFF                                                          \
+    -label_mode 1 -label_size 4                                              \
+    -no_cor                                                                  \
+    -do_clean                                                               
+
+\rm ${tcoef}*
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  "${opbarrt}.txt"                                                 \
+    -prefix "${opbarrt}.json"                                               
+
+cat << EOF >! ${tjson}
+itemtype    :: VOL
+itemid      :: vis_0_Coef
+blockid     :: vstat
+blockid_hov :: statistics vols
+title       :: Check statistics vols (and effect estimates)
+text        :: "olay: [${olaybrick}] '${olaylabel}' (in ${olay_name})" ,, " thr: [${thrbrick}] '${thrlabel}' (df = ${thr_dof})"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+
+cat << EOF >! ${tjson2}
+itemtype    :: VOL
+itemid      :: vis_0_Coef
+blockid     :: vstat
+blockid_hov :: statistics vols
+title       :: Check statistics vols (and effect estimates)
+subtext     :: "SHOW_PBAR:${opref}.pbar.json"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson2}                                                        \
+    -prefix ${ojson2}                                                       
+
+
+# ========================= mot enorm and censoring ==========================
+
+# review plots (colored TRs are censored); outliers with enorm motion limit
+
+set jpgsize = 1600
+set opref   = qc_07_mot_enorm
+set tjson   = _tmp.txt
+set ojson   = ${odir_img}/${opref}.json
+
+1dplot                                                                       \
+    -one                                                                     \
+    ${cen_cmd}                                                               \
+    ${cen_lim_mot_yax}                                                       \
+    -jpgs     ${jpgsize} "${odir_img}/${opref}"                              \
+    -aspect   2                                                              \
+    -xlabel   "vol"                                                          \
+    -title    "Mot enorm (black)"                                            \
+    ${enorm_dset}                                                            \
+    "${cen_lim_mot}"                                                        
+
+cat << EOF >! ${tjson}
+itemtype    :: 1D
+itemid      :: enorm
+blockid     :: mot
+blockid_hov :: motion and outliers
+title       :: Check motion and outliers
+text        :: Motion Euclidean norm (enorm)
+subtext     :: "${rep_cen_str}"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+# ====================== outlier fraction and censoring ======================
+
+# review plots (colored TRs are censored); outliers with fraction limit
+
+set jpgsize = 1600
+set opref   = qc_08_mot_outlr
+set tjson   = _tmp.txt
+set ojson   = ${odir_img}/${opref}.json
+
+1dplot                                                                       \
+    -one                                                                     \
+    ${cen_cmd} ${cen_lim_out_yax}                                            \
+    -jpgs     ${jpgsize} "${odir_img}/${opref}"                              \
+    -aspect   2                                                              \
+    -xlabel   "vol"                                                          \
+    -title    "Outlier frac (black)"                                         \
+    ${outlier_dset}                                                          \
+    "${cen_lim_out}"                                                        
+
+cat << EOF >! ${tjson}
+itemtype    :: 1D
+itemid      :: outlr
+blockid     :: mot
+blockid_hov :: motion and outliers
+title       :: Check motion and outliers
+text        :: "Volumetric fraction of outliers"
+subtext     :: "${rep_cen_str}"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+# ==================== volreg motion pars, and censoring =====================
+
+# review plots: 3dvolreg motion regressors
+
+set jpgsize = 1600
+set opref   = qc_09_mot_VR6
+set tjson   = _tmp.txt
+set ojson   = ${odir_img}/${opref}.json
+
+1dplot                                                                       \
+    -sepscl                                                                  \
+    -volreg                                                                  \
+    ${cen_cmd}                                                               \
+    -xlabel   "vol"                                                          \
+    -title    "Estimated motion parameters (volreg)"                         \
+    -jpgs     ${jpgsize} "${odir_img}/${opref}"                              \
+    "${motion_dset}"                                                        
+
+cat << EOF >! ${tjson}
+itemtype    :: 1D
+itemid      :: VR6
+blockid     :: mot
+blockid_hov :: motion and outliers
+title       :: Check motion and outliers
+text        :: 6 volume registration motion parameters (in ${motion_dset})
+subtext     :: "${rep_cen_str}"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+# ======================== make grayplot of residuals ========================
+
+# grayplot of residuals
+
+set opref       = qc_10_mot_grayplot
+set errts_name  = `3dinfo -prefix ${errts_dset}`
+set mask_name   = `3dinfo -prefix ${mask_dset}`
+set tmpvol_pref = __tmp_ZXCV_img
+set tmp_gplot   = __tmp_ZXCV_gplot.jpg
+set opbarrt     = ${odir_img}/${opref}.pbar
+set tjson       = _tmp.txt
+set ojson       = ${odir_img}/${opref}.json
+
+3dGrayplot                                                                   \
+    -polort -1                                                               \
+    -pvorder                                                                 \
+    -dimen  1800 500                                                         \
+    -range  3.29                                                             \
+    -input  ${errts_dset}                                                    \
+    -mask   ${mask_dset}                                                     \
+    -prefix ${tmp_gplot}                                                    
+
+@chauffeur_afni                                                              \
+    -ulay  ${mask_dset}                                                      \
+    -olay  ${mask_dset}                                                      \
+    -box_focus_slices AMASK_FOCUS_OLAY                                       \
+    -cbar gray_scale                                                         \
+    -func_range 3.29                                                         \
+    -blowup 1                                                                \
+    -set_subbricks 0 0 0                                                     \
+    -opacity 9                                                               \
+    -pbar_saveim   "${opbarrt}.jpg"                                          \
+    -pbar_comm_range "for normal distr, bounds of 0.001 prob tail"           \
+    -prefix        "${tmpvol_pref}"                                          \
+    -save_ftype JPEG                                                         \
+    -montx 1 -monty 1                                                        \
+    -set_xhairs OFF                                                          \
+    -label_mode 1 -label_size 4                                              \
+    -no_cor                                                                  \
+    -do_clean                                                               
+
+\cp ${tmp_gplot} ${odir_img}/${opref}.jpg                                   
+
+
+
+\rm ${tmpvol_pref}*jpg
+\rm ${tmp_gplot}
+
+cat << EOF >! ${tjson}
+itemtype    :: 1D
+itemid      :: grayplot
+blockid     :: mot
+blockid_hov :: motion and outliers
+title       :: Check motion and outliers
+text        :: "Grayplot ('-pvorder') of residuals dset: ${errts_name}"
+subtext     :: "SHOW_PBAR:${opref}.pbar.json"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  "${opbarrt}.txt"                                                 \
+    -prefix "${opbarrt}.json"                                               
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+# ================ sum of regressors of interest in X-matrix =================
+
+# view xmatrix
+
+set jpgsize = 1600
+set opref   = qc_11_regr_ideal
+set tjson   = _tmp.txt
+set ojson   = ${odir_img}/${opref}.json
+set labels  = "regressor sum"
+
+1dplot                                                                       \
+    -sepscl                                                                  \
+    ${cen_cmd}                                                               \
+    -jpgs     $jpgsize "${odir_img}/${opref}"                                \
+    -aspect   2                                                              \
+    -xlabel   "vol"                                                          \
+    -title    "Sum of regressors of interest in the X-matrix"                \
+    ${sum_ideal}                                                            
+
+cat << EOF >! ${tjson}
+itemtype    :: 1D
+itemid      :: ideal
+blockid     :: regr
+blockid_hov :: regressors
+title       :: Check regressors, DFs and residuals
+text        :: "Sum of regressors of interest (in ${sum_ideal})"
+subtext     :: "${rep_cen_str}"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+# ============== plot X-matrix, but without baseline and motion ==============
+
+# view xmatrix of regressors of interest (${xmat_stim})
+
+set jpgsize = 1600
+set opref   = qc_12_regr_stims
+set tjson   = _tmp.txt
+set ojson   = ${odir_img}/${opref}.json
+set labels  = `1d_tool.py -verb 0 -infile ${xmat_stim} -show_labels`
+
+1dplot                                                                       \
+    -sepscl                                                                  \
+    ${cen_cmd}                                                               \
+    -jpgs     $jpgsize "${odir_img}/${opref}"                                \
+    -aspect   2                                                              \
+    -xlabel   "vol"                                                          \
+    -title    "Regressors of interest in the X-matrix"                       \
+    ${xmat_stim}                                                            
+
+cat << EOF >! ${tjson}
+itemtype    :: 1D
+itemid      :: stims
+blockid     :: regr
+blockid_hov :: regressors
+title       :: Check regressors, DFs and residuals
+text        :: "Regressors of interest (per stim, in ${xmat_stim})"
+subtext     :: "${rep_cen_str}"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+# ========================= check degrees of freedom =========================
+
+# df check for processing
+
+set opref  = qc_13_regr_df
+set tjson  = _tmp.txt
+set ojson  = ${odir_img}/${opref}.json
+
+1d_tool.py -show_df_info -infile ${xmat_regress}                             \
+    > ${odir_img}/${opref}.dat                                              
+
+echo "++ Check summary of degrees of freedom in: ${odir_img}/${opref}.dat"
+
+cat << EOF >! ${tjson}
+itemtype    :: DAT
+itemid      :: df
+blockid     :: regr
+blockid_hov :: regressors
+title       :: Check regressors, DFs and residuals
+text  ::  "Summary of degrees of freedom (DF) usage from processing"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+# ==================== check ave errts corr through brain ====================
+
+# check ave errts (in WB mask) corr throughout dset:
+#     corr brain dset: corr_brain+orig.HEAD
+
+set opref     = qc_14_regr_corr_errts
+set ulay_dset = ${main_dset}
+set focus_box = ${main_dset}
+set olay_dset = corr_brain+orig.HEAD
+set ulay_name = `3dinfo -prefix ${ulay_dset}`
+set olay_name = `3dinfo -prefix ${olay_dset}`
+set tjson     = _tmp.txt
+set ojson     = ${odir_img}/${opref}.axi.json
+set tjson2    = _tmp2.txt
+set ojson2    = ${odir_img}/${opref}.sag.json
+set opbarrt   = ${odir_img}/${opref}.pbar
+
+@chauffeur_afni                                                              \
+    -ulay  ${ulay_dset}                                                      \
+    -box_focus_slices ${focus_box}                                           \
+    -olay  ${olay_dset}                                                      \
+    -cbar Reds_and_Blues_Inv                                                 \
+    -ulay_range 0% 120%                                                      \
+    -func_range 0.6                                                          \
+    -thr_olay 0.3                                                            \
+    -olay_alpha Yes                                                          \
+    -olay_boxed Yes                                                          \
+    -set_subbricks 0 0 0                                                     \
+    -opacity 9                                                               \
+    -pbar_saveim   "${opbarrt}.jpg"                                          \
+    -pbar_comm_range "Pearson r"                                             \
+    -pbar_comm_thr   "alpha+boxed on"                                        \
+    -prefix        "${odir_img}/${opref}"                                    \
+    -save_ftype JPEG                                                         \
+    -montx 7 -monty 1                                                        \
+    -montgap 1                                                               \
+    -montcolor 'black'                                                       \
+    -set_xhairs OFF                                                          \
+    -label_mode 1 -label_size 4                                              \
+    -no_cor                                                                  \
+    -do_clean                                                               
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  "${opbarrt}.txt"                                                 \
+    -prefix "${opbarrt}.json"                                               
+
+cat << EOF >! ${tjson}
+itemtype    :: VOL
+itemid      :: corr_errts
+blockid     :: regr
+blockid_hov :: regressors
+title       :: Check regressors, DFs and residuals
+text        :: "olay: corr of WB-average errts with each voxel (${olay_name})"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+
+cat << EOF >! ${tjson2}
+itemtype    :: VOL
+itemid      :: corr_errts
+blockid     :: regr
+blockid_hov :: regressors
+title       :: Check regressors, DFs and residuals
+subtext     :: "SHOW_PBAR:${opref}.pbar.json"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson2}                                                        \
+    -prefix ${ojson2}                                                       
+
+
+# ============================= check final TSNR =============================
+
+# TSNR: 5-95%ile range in mask_dset highlighted
+
+set opref     = qc_15_regr_tsnr_fin
+set ulay_dset = ${main_dset}
+set olay_dset = ${tsnr_dset}
+set focus_box = ${main_dset}
+set ulay_name = `3dinfo -prefix ${ulay_dset}`
+set olay_name = `3dinfo -prefix ${olay_dset}`
+set avsp      = `3dinfo -av_space ${olay_dset}`
+set olaylabel = `3dinfo -label ${olay_dset}`
+set tjson     = _tmp.txt
+set ojson     = ${odir_img}/${opref}.axi.json
+set tjson2    = _tmp2.txt
+set ojson2    = ${odir_img}/${opref}.sag.json
+set opbarrt   = ${odir_img}/${opref}.pbar
+set mask_name = `3dinfo -prefix ${mask_dset}`
+
+adjunct_apqc_tsnr_general                                                    \
+    -ulay         ${ulay_dset}                                               \
+    -olay         ${olay_dset}                                               \
+    -focus        ${focus_box}                                               \
+    -mask         ${mask_dset}                                               \
+    -no_cor                                                                  \
+    -prefix       ${odir_img}/${opref}                                       \
+    -prefix_cbar  ${opbarrt}                                                
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  "${opbarrt}.txt"                                                 \
+    -prefix "${opbarrt}.json"                                               
+
+cat << EOF >! ${tjson}
+itemtype    :: VOL
+itemid      :: tsnr_fin
+blockid     :: regr
+blockid_hov :: regressors
+title       :: Check regressors, DFs and residuals
+text        :: "olay: ${olay_name} (final TSNR dset)" ,, "mask: ${mask_name} (for percentile range)"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+
+cat << EOF >! ${tjson2}
+itemtype    :: VOL
+itemid      :: tsnr_fin
+blockid     :: regr
+blockid_hov :: regressors
+title       :: Check regressors, DFs and residuals
+subtext     :: "SHOW_PBAR:${opref}.pbar.json"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson2}                                                        \
+    -prefix ${ojson2}                                                       
+
+
+# =========================== correlation warnings ===========================
+
+# review: check for correlation matrix warnings
+
+set opref  = qc_16_warns_xmat
+set tjson  = _tmp.txt
+set ojson  = ${odir_img}/${opref}.json
+
+1d_tool.py                                                                   \
+    -show_cormat_warnings                                                    \
+    -infile ${xmat_regress}                                                  \
+    > ${odir_img}/${opref}.dat                                              
+
+echo "++ Check for corr matrix warnings in: ${odir_img}/${opref}.dat"
+
+cat << EOF >! ${tjson}
+itemtype    :: WARN
+itemid      :: xmat
+blockid     :: warns
+blockid_hov :: all warnings from processing
+title       :: Check all warnings from processing
+text        :: "Regression matrix correlation warnings"
+warn_level  :: none
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+# ======================== pre-steady state warnings =========================
+
+# review: check for pre-steady state warnings
+
+set opref  = qc_17_warns_press
+set tjson  = _tmp.txt
+set ojson  = ${odir_img}/${opref}.json
+
+if ( -f ${pre_ss_warn_dset} && ! -z ${pre_ss_warn_dset} ) then
+    cat ${pre_ss_warn_dset} > ${odir_img}/${opref}.dat
+else
+    printf ""  > ${odir_img}/${opref}.dat
+endif
+
+cat << EOF >! ${tjson}
+itemtype    :: WARN
+itemid      :: press
+blockid     :: warns
+blockid_hov :: all warnings from processing
+title       :: Check all warnings from processing
+text        :: "Pre-steady state warnings"
+warn_level  :: none
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+# ============================ var_line warnings =============================
+
+# show any variance line warnings from the EPI
+
+echo "++ Check EPI variance lines (vlines) in: vlines.pb00.tcat"
+
+set opref   = qc_18_warns_vlines
+set tjsonw  = _tmpw.txt
+set ojsonw  = ${odir_img}/${opref}.json
+set tjson   = _tmp.txt
+set ojson   = ${odir_img}/${opref}_0.sag.json
+
+cat << EOF >! ${tjsonw}
+itemtype    :: WARN
+itemid      :: vlines
+blockid     :: warns
+blockid_hov :: all warnings from processing
+title       :: Check all warnings from processing
+text        :: "EPI variance lines warnings"
+warn_level  :: medium
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjsonw}                                                        \
+    -prefix ${ojsonw}                                                       
+
+
+
+\cp _tmp_vlines_warns.txt ${odir_img}/${opref}.dat
+if ( -f vlines.pb00.tcat/QC_var_lines.jpg ) then
+    \cp vlines.pb00.tcat/QC_var_lines.jpg ${odir_img}/${opref}_0.sag.jpg
+endif
+
+cat << EOF >! ${tjson}
+itemtype    :: VOL
+itemid      :: vlines
+blockid     :: warns
+blockid_hov :: all warnings from processing
+title       :: Check all warnings from processing
+subtext     :: "ulay: vlines.pb00.tcat/var*scale*.nii.gz (scaled variance per run)",,"olay: line markers for r01:1, r01:2, r01:3, r01:4"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+# =========================== ss review basic info ===========================
+
+# summary quantities from processing
+
+set opref  = qc_19_qsumm_ssrev
+set tjson  = _tmp.txt
+set ojson  = ${odir_img}/${opref}.json
+
+cat out.ss_review.${subj}.txt                                                \
+    > ${odir_img}/${opref}.dat                                              
+
+echo "++ Check basic summary quants from proc in: ${odir_img}/${opref}.dat"
+
+cat << EOF >! ${tjson}
+itemtype    :: DAT
+itemid      :: ssrev
+blockid     :: qsumm
+blockid_hov :: summary quantities from @ss_review_basic
+title       :: Check summary quantities from @ss_review_basic
+text        :: "Basic summary quantities from processing"
+EOF
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -delimiter_major '::'                                                    \
+    -delimiter_minor ',,'                                                    \
+    -input  ${tjson}                                                         \
+    -prefix ${ojson}                                                        
+
+
+# ======================== copy JSONs over to QC dir =========================
+
+# preserve subj jsons
+
+set all_jsons = ( out.ss_review_uvars.json                                   \
+    )                                                                       
+
+foreach ff ( ${all_jsons} )
+    \cp ${ff} ${odir_info}/.
+end
+
+
+# ================== copy review basic text file to QC dir ===================
+
+# preserve subj review_basic text file info, and have an editable JSON
+# version
+
+set obase = ${ss_review_dset:r}
+set ojson = ${odir_info}/${obase}.json
+
+\cp ${ss_review_dset} ${odir_info}/.
+
+
+
+abids_json_tool.py                                                           \
+    -overwrite                                                               \
+    -txt2json                                                                \
+    -literal_keys                                                            \
+    -values_stay_str                                                         \
+    -input  ${ss_review_dset}                                                \
+    -prefix ${ojson}                                                        
+# ==================== ss review basic info *to terminal* ====================
+
+# basic information from processing
+
+echo ""
+echo ""
+echo "# +++++++++++ Check output of @ss_review_basic +++++++++++ #"
+echo ""
+
+cat ${ss_review_dset}                                                       
+
+
+# ====================== Finish gracefully, if possible ======================
+
+exit 0                                                                      

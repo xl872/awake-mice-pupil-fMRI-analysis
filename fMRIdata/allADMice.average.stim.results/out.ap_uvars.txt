@@ -1,0 +1,5 @@
+  copy_anat       : ambmc_ori_100+orig.HEAD
+  mask_dset       : mask_import_100mask+orig.HEAD
+  ss_review_dset  : out.ss_review.allMice.average.stim.txt
+  final_epi_dset  : vr_base+orig.HEAD
+  vlines_tcat_dir : vlines.pb00.tcat

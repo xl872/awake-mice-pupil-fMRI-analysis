@@ -1,0 +1,29 @@
+tcsh -f @ss_review_basic
+1dplot -sepscl -volreg -ynames enorm outliers - \
+       -wintitle "mot params, enorm, outliers" dfile_rall.1D motion_allMice.average.stim_enorm.1D outcount_rall.1D &
+1dplot -one outcount_rall.1D "1D: 205@0.1" &
+1dplot -one motion_allMice.average.stim_enorm.1D "1D: 205@0.3" &
+afni anat_final.allMice.average.stim+orig.HEAD pb02.allMice.average.stim.r01.volreg+orig.HEAD &
+cat out.df_info.txt
+cat 3dDeconvolve.err
+1d_tool.py -show_cormat_warnings -infile X.xmat.1D
+1dplot -sepscl X.stim.xmat.1D &
+1dplot sum_ideal.1D &
+set pp = ( `3dBrickStat -slow -percentile 90 1 90 \
+            -mask mask_import_100mask+orig stats.allMice.average.stim+orig"[0]"` )
+set thresh = $pp[2]
+echo -- thresholding F-stat at $thresh
+# locate peak coords of biggest masked cluster and jump there
+3dcalc -a stats.allMice.average.stim+orig"[0]" -b mask_import_100mask+orig -expr "a*b" \
+       -overwrite -prefix .tmp.F
+set maxcoords = ( `3dclust -DAFNI_ORIENT=RAI -1thresh $thresh -dxyz=1 1 2 \
+       .tmp.F+orig | & awk '/^ / {print $14, $15, $16}' | head -n 1` )
+echo -- jumping to max coords: $maxcoords
+afni -com "OPEN_WINDOW A.axialimage"     \
+     -com "OPEN_WINDOW A.sagittalimage"  \
+     -com "SWITCH_UNDERLAY anat_final.allMice.average.stim" \
+     -com "SWITCH_OVERLAY stats.allMice.average.stim"   \
+     -com "SET_SUBBRICKS A 0 0 0"        \
+     -com "SET_THRESHNEW A $thresh"      \
+     -com "SET_DICOM_XYZ A $maxcoords"
+

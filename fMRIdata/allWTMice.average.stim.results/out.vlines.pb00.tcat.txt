@@ -1,0 +1,419 @@
+++ have nslices : 75
+++ copying pb00.allMice.average.stim.r01.tcat+orig.HEAD[0..$] to ts.0.orig.r01.nii.gz
+++ 3dTcat: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ elapsed time = 20.5 s
+++ creating automask from first dset
+++ 3dAutomask: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: Emperor Zhark
+++ Loading dataset ts.0.orig.r01.nii.gz
+++ Forming automask
+ + Fixed clip level = 0.394575
+ + Used gradual clip level = 0.294233 .. 0.574353
+ + Number voxels above clip level = 268972
+ + Clustering voxels ...
+ + Largest cluster has 268946 voxels
+ + Clustering voxels ...
+ + Largest cluster has 268338 voxels
+ + Filled   272 voxels in small holes; now have 268610 voxels
+ + Filled   599 voxels in large holes; now have 269209 voxels
+ + Clustering voxels ...
+ + Largest cluster has 269209 voxels
+ + Clustering non-brain voxels ...
+ + Clustering voxels ...
+ + Largest cluster has 1237841 voxels
+ + Mask now has 269209 voxels
+++ 269209 voxels in the mask [out of 1507050: 17.86%]
+++ first   7 x-planes are zero [from L]
+++ last    7 x-planes are zero [from R]
+++ first  39 y-planes are zero [from P]
+++ last   62 y-planes are zero [from A]
+++ first   7 z-planes are zero [from I]
+++ last    8 z-planes are zero [from S]
+++ Output dataset ./mask.nii.gz
+++ CPU time = 0.000000 sec
+
+-- will apply mask mask.nii.gz
+++ eroding mask.nii.gz by 2 voxels
+++ no -frac option: defaulting to -union
+++ processing 1 input dataset(s), NN=2...
+++ padding all datasets by 0 (for dilations)
+++ frac 0 over 1 volumes gives min count 0
+++ voxel limits: 0 clipped, 212291 survived, 1294759 were zero
+++ writing result mask.nii.gz...
+++ Output dataset ./mask.nii.gz
+
+++ requiring 5 voxels in mask columns
+++ 3dLocalstat: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: Emperor Zhark
+++ Number of voxels in mask = 212291
+++ Neighborhood comprises 151 voxels
+++ Start sub-brick [0]
+++ Output dataset ./tmp.mask.col.count.nii.gz
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./mask.nii.gz
+
+-- detrend -polort 3, new eset = ts.1.det.r01.nii.gz
+++ 3dTproject: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: Cox the Algebraic (Linear)
+++ Setting up regressors
+++ 1 Blocks * 4 polynomials -- 4 polort regressors
+++ 205 retained time points MINUS 4 regressors ==> 201 D.O.F. left
+++ no -mask option ==> processing all 1507050 voxels in dataset
+++ THD_dset_to_vectim: allocated 1235781000 bytes
+[7m*+ WARNING:[0m 3dTproject input data :: 1172704 vectors are constant
+
+++ 3dTstat: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: KR Hammett & RW Cox
+++ Output dataset ./tmp.stdev.nii.gz
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./var.0.orig.r01.nii.gz
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./var.1.scale.r01.nii.gz
+++ 3dLocalstat: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: Emperor Zhark
+++ Number of voxels in mask = 211481
+++ Neighborhood comprises 151 voxels
+++ Start sub-brick [0]
+++ Output dataset ./proj.r01.nii.gz
+++ Neighborhood definition (NN=3) accepted
+++ User input stat threshold: -1
+++ User input stat threshold: 0.95
+++ Data volume:      [0] 'MEAN'
+++ Threshold volume: [0] 'MEAN'
+++ How many sides to this stat? 0
+++ Looks like clustering is *not* being performed on a stat value; won't worry about sidedness, then.
+++ Opt code: 2sided,-1,0.95,NN3
+[7m*+ WARNING:[0m No mask being used? That *could* be OK, but thought I'd let you know...
+++ Threshold volume [0] does *not* appear to be a stat!
+++ Sorting clusters by size.
+#
+#  Cluster report 
+#[ Dataset prefix      = proj.r01.nii.gz ]
+#[ Threshold vol       = [0] 'MEAN' ]
+#[ Supplement dat vol  = [0] 'MEAN' ]
+#[ Option summary      = 2sided,-1,0.95,NN3 ]
+#[ Threshold value(s)  = left-tail thr=-1.000000;  right-tail thr=0.950000 ]
+#[ Aux. stat. info.    = not a stat! ]
+#[ Nvoxel threshold    = 0;  Volume threshold = 0.000 ]
+#[ Single voxel volume = 0.001 (microliters) ]
+#[ Neighbor type, NN   = 3 ]
+#[ Voxel datum type    = float ]
+#[ Voxel dimensions    = 0.100 mm X 0.100 mm X 0.100 mm ]
+#[ Coordinates Order   = RAI ]
+#[ Mean and SEM based on signed voxel intensities ]
+#
+#Volume  CM RL  CM AP  CM IS  minRL  maxRL  minAP  maxAP  minIS  maxIS    Mean     SEM    Max Int  MI RL  MI AP  MI IS
+#------  -----  -----  -----  -----  -----  -----  -----  -----  -----  -------  -------  -------  -----  -----  -----
+    246   -3.3   -1.9   -0.1   -3.6   -3.1   -2.6   -1.3   -0.9    1.2   0.9867    0.001        1   -3.4   -2.5   -0.9 
+    194    3.3   -2.1   -0.1    3.1    3.5   -2.6   -1.5   -0.9    1.2     0.99  9.9e-04        1    3.3   -2.5   -0.9 
+     76   -3.9   -0.9   -0.1   -4.0   -3.8   -1.1   -0.6   -0.7    0.6   0.9825   0.0012        1   -4.0   -0.8   -0.4 
+     12    3.9   -0.8   -0.2    3.9    3.9   -0.8   -0.7   -0.5    0.1    0.984   0.0041        1    3.9   -0.8   -0.4 
+#------  -----  -----  -----  -----  -----  -----  -----  -----  -----  -------  -------  -------  -----  -----  -----
+#   528   -0.8   -1.8   -0.1                                             0.9873  6.3e-04                             
+  -3.40   -2.50    0.01
+   3.30   -2.50    0.01
+  -4.00   -0.80    0.01
+   3.90   -0.80    0.01
+
+-- evaluating intersection...
+++ 3dMean: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ WARNING: Have only 1 dset.
+++ Neighborhood definition (NN=3) accepted
+++ User input stat threshold: -1
+++ User input stat threshold: 0.95
+++ Data volume:      [0] 'MEAN'
+++ Threshold volume: [0] 'MEAN'
+++ How many sides to this stat? 0
+++ Looks like clustering is *not* being performed on a stat value; won't worry about sidedness, then.
+++ Opt code: 2sided,-1,0.95,NN3
+[7m*+ WARNING:[0m No mask being used? That *could* be OK, but thought I'd let you know...
+++ Threshold volume [0] does *not* appear to be a stat!
+++ Sorting clusters by size.
+#
+#  Cluster report 
+#[ Dataset prefix      = proj.min.nii.gz ]
+#[ Threshold vol       = [0] 'MEAN' ]
+#[ Supplement dat vol  = [0] 'MEAN' ]
+#[ Option summary      = 2sided,-1,0.95,NN3 ]
+#[ Threshold value(s)  = left-tail thr=-1.000000;  right-tail thr=0.950000 ]
+#[ Aux. stat. info.    = not a stat! ]
+#[ Nvoxel threshold    = 0;  Volume threshold = 0.000 ]
+#[ Single voxel volume = 0.001 (microliters) ]
+#[ Neighbor type, NN   = 3 ]
+#[ Voxel datum type    = float ]
+#[ Voxel dimensions    = 0.100 mm X 0.100 mm X 0.100 mm ]
+#[ Coordinates Order   = RAI ]
+#[ Mean and SEM based on signed voxel intensities ]
+#
+#Volume  CM RL  CM AP  CM IS  minRL  maxRL  minAP  maxAP  minIS  maxIS    Mean     SEM    Max Int  MI RL  MI AP  MI IS
+#------  -----  -----  -----  -----  -----  -----  -----  -----  -----  -------  -------  -------  -----  -----  -----
+    246   -3.3   -1.9   -0.1   -3.6   -3.1   -2.6   -1.3   -0.9    1.2   0.9867    0.001        1   -3.4   -2.5   -0.9 
+    194    3.3   -2.1   -0.1    3.1    3.5   -2.6   -1.5   -0.9    1.2     0.99  9.9e-04        1    3.3   -2.5   -0.9 
+     76   -3.9   -0.9   -0.1   -4.0   -3.8   -1.1   -0.6   -0.7    0.6   0.9825   0.0012        1   -4.0   -0.8   -0.4 
+     12    3.9   -0.8   -0.2    3.9    3.9   -0.8   -0.7   -0.5    0.1    0.984   0.0041        1    3.9   -0.8   -0.4 
+#------  -----  -----  -----  -----  -----  -----  -----  -----  -----  -------  -------  -------  -----  -----  -----
+#   528   -0.8   -1.8   -0.1                                             0.9873  6.3e-04                             
+  -3.40   -2.50    0.01
+   3.30   -2.50    0.01
+  -4.00   -0.80    0.01
+   3.90   -0.80    0.01
+++ Check about making images
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+[7m*+ WARNING:[0m input 'a' is not used in the expression
+++ Symbol k using predefined value
+++ Symbol x using predefined value
+++ Symbol y using predefined value
+[7m*+ WARNING:[0m output sub-brick 0 is all zeros!
+++ Output dataset ./__tmp_dash_line.nii.gz
+++ olay_alpha has known value: Yes
+++ My command:
+   @chauffeur_afni -ulay var.1.scale.r01.nii.gz -olay __tmp_dash_line.nii.gz -pbar_posonly -cbar Reds_and_Blues_Inv -func_range 1 -set_subbricks 0 0 0 -thr_olay 0.5 -olay_alpha Yes -olay_boxed Yes -set_dicom_xyz -3.40 -2.50 0.01 -opacity 9 -blowup 4 -no_cor -no_axi -montx 1 -monty 1 -prefix img_r01_01 -set_xhairs OFF -label_mode 0
+
+++ Using AFNI ver : AFNI_23.0.02
+++ chauffeur ver  : 6.52
+
+------------------ start of optionizing ------------------
+
+++ Found input file:   var.1.scale.r01.nii.gz
+++ Found input file:   __tmp_dash_line.nii.gz
+++ Using blowup factor: 4
+++ Using opacity:  9
+++ Making temporary work directory to copy vis files: ./__tmp_chauf_yz71vkXpLVi
+++ Converted 0 to labels
+++ Final subbrick indices: 0 0 0
+++ Copy ulay to visualize (volumetric) within user's range:
+++ Ulay to be visualized within user range:
+  [0%, 98%] -> [0.000000, 1.000000]
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ././__tmp_chauf_yz71vkXpLVi/tmp_ulay.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+[7m*+ WARNING:[0m output sub-brick 0 is all zeros!
+++ Output dataset ././__tmp_chauf_yz71vkXpLVi/tmp_olay.nii
+++ User-entered function range value value (1)
+++ Dimensions (xyzt): 102 197 75 1
+++ (initial) Slice spacing ordered (x,y,z) is:  102 197 75
+++ Will have user's chosen: SET_DICOM_XYZ -3.40 -2.50 0.01
+
+------------------- end of optionizing -------------------
+
+ -- trying to start Xvfb :525 
+[1] 115917
++/local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_WT/allMice.average.stim.results/vlines.pb00.tcat/__tmp_chauf_yz71vkXpLVi++ Writing one 788x300 image to filter '/bin/pnmtopng -compression 9 > ./img_r01_01.sag.png'
+
+AFNI QUITTs!
+
++++ Command Echo:
+   afni -q -no1D -noplugins -no_detach -com SWITCH_UNDERLAY tmp_ulay.nii -com SWITCH_OVERLAY  tmp_olay.nii -com SEE_OVERLAY     + -com OPEN_WINDOW sagittalimage opacity=9 mont=1x1:102:0:black crop=0:0,0:0  -com OPEN_WINDOW coronalimage  opacity=9 mont=1x1:197:0:black crop=0:0,0:0  -com OPEN_WINDOW axialimage    opacity=9 mont=1x1:75:0:black crop=0:0,0:0  -com SET_PBAR_ALL    +99 1 Reds_and_Blues_Inv -com DO_NOTHING -com SET_SUBBRICKS   0 0 0 -com SET_ULAY_RANGE A.all 0.000000 1.000000 -com SET_FUNC_RANGE  1 -com SET_THRESHNEW   0.5 * -com SET_FUNC_ALPHA  Yes -com SET_FUNC_BOXED  Yes -com SET_FUNC_RESAM  NN.NN -com SET_XHAIRS      OFF -com SET_XHAIR_GAP   -1 -com SET_DICOM_XYZ -3.40 -2.50 0.01 -com SAVE_PNG sagittalimage ./img_r01_01.sag blowup=4 -com QUITT ./__tmp_chauf_yz71vkXpLVi 
+
+
++* Removing temporary image directory './__tmp_chauf_yz71vkXpLVi'.
+
+[1]  + Done                          Xvfb :525 -screen 0 1024x768x24
+
+++ DONE (good exit)
+   see: ./img_r01_01*
+
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+[7m*+ WARNING:[0m input 'a' is not used in the expression
+++ Symbol k using predefined value
+++ Symbol x using predefined value
+++ Symbol y using predefined value
+[7m*+ WARNING:[0m output sub-brick 0 is all zeros!
+++ Output dataset ./__tmp_dash_line.nii.gz
+++ olay_alpha has known value: Yes
+++ My command:
+   @chauffeur_afni -ulay var.1.scale.r01.nii.gz -olay __tmp_dash_line.nii.gz -pbar_posonly -cbar Reds_and_Blues_Inv -func_range 1 -set_subbricks 0 0 0 -thr_olay 0.5 -olay_alpha Yes -olay_boxed Yes -set_dicom_xyz 3.30 -2.50 0.01 -opacity 9 -blowup 4 -no_cor -no_axi -montx 1 -monty 1 -prefix img_r01_02 -set_xhairs OFF -label_mode 0
+
+++ Using AFNI ver : AFNI_23.0.02
+++ chauffeur ver  : 6.52
+
+------------------ start of optionizing ------------------
+
+++ Found input file:   var.1.scale.r01.nii.gz
+++ Found input file:   __tmp_dash_line.nii.gz
+++ Using blowup factor: 4
+++ Using opacity:  9
+++ Making temporary work directory to copy vis files: ./__tmp_chauf_AIomKpfYwrg
+++ Converted 0 to labels
+++ Final subbrick indices: 0 0 0
+++ Copy ulay to visualize (volumetric) within user's range:
+++ Ulay to be visualized within user range:
+  [0%, 98%] -> [0.000000, 1.000000]
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ././__tmp_chauf_AIomKpfYwrg/tmp_ulay.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+[7m*+ WARNING:[0m output sub-brick 0 is all zeros!
+++ Output dataset ././__tmp_chauf_AIomKpfYwrg/tmp_olay.nii
+++ User-entered function range value value (1)
+++ Dimensions (xyzt): 102 197 75 1
+++ (initial) Slice spacing ordered (x,y,z) is:  102 197 75
+++ Will have user's chosen: SET_DICOM_XYZ 3.30 -2.50 0.01
+
+------------------- end of optionizing -------------------
+
+ -- trying to start Xvfb :693 
+[1] 116096
++/local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_WT/allMice.average.stim.results/vlines.pb00.tcat/__tmp_chauf_AIomKpfYwrg++ Writing one 788x300 image to filter '/bin/pnmtopng -compression 9 > ./img_r01_02.sag.png'
+
+AFNI QUITTs!
+
++++ Command Echo:
+   afni -q -no1D -noplugins -no_detach -com SWITCH_UNDERLAY tmp_ulay.nii -com SWITCH_OVERLAY  tmp_olay.nii -com SEE_OVERLAY     + -com OPEN_WINDOW sagittalimage opacity=9 mont=1x1:102:0:black crop=0:0,0:0  -com OPEN_WINDOW coronalimage  opacity=9 mont=1x1:197:0:black crop=0:0,0:0  -com OPEN_WINDOW axialimage    opacity=9 mont=1x1:75:0:black crop=0:0,0:0  -com SET_PBAR_ALL    +99 1 Reds_and_Blues_Inv -com DO_NOTHING -com SET_SUBBRICKS   0 0 0 -com SET_ULAY_RANGE A.all 0.000000 1.000000 -com SET_FUNC_RANGE  1 -com SET_THRESHNEW   0.5 * -com SET_FUNC_ALPHA  Yes -com SET_FUNC_BOXED  Yes -com SET_FUNC_RESAM  NN.NN -com SET_XHAIRS      OFF -com SET_XHAIR_GAP   -1 -com SET_DICOM_XYZ 3.30 -2.50 0.01 -com SAVE_PNG sagittalimage ./img_r01_02.sag blowup=4 -com QUITT ./__tmp_chauf_AIomKpfYwrg 
+
+
++* Removing temporary image directory './__tmp_chauf_AIomKpfYwrg'.
+
+[1]    Done                          Xvfb :693 -screen 0 1024x768x24
+
+++ DONE (good exit)
+   see: ./img_r01_02*
+
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+[7m*+ WARNING:[0m input 'a' is not used in the expression
+++ Symbol k using predefined value
+++ Symbol x using predefined value
+++ Symbol y using predefined value
+[7m*+ WARNING:[0m output sub-brick 0 is all zeros!
+++ Output dataset ./__tmp_dash_line.nii.gz
+++ olay_alpha has known value: Yes
+++ My command:
+   @chauffeur_afni -ulay var.1.scale.r01.nii.gz -olay __tmp_dash_line.nii.gz -pbar_posonly -cbar Reds_and_Blues_Inv -func_range 1 -set_subbricks 0 0 0 -thr_olay 0.5 -olay_alpha Yes -olay_boxed Yes -set_dicom_xyz -4.00 -0.80 0.01 -opacity 9 -blowup 4 -no_cor -no_axi -montx 1 -monty 1 -prefix img_r01_03 -set_xhairs OFF -label_mode 0
+
+++ Using AFNI ver : AFNI_23.0.02
+++ chauffeur ver  : 6.52
+
+------------------ start of optionizing ------------------
+
+++ Found input file:   var.1.scale.r01.nii.gz
+++ Found input file:   __tmp_dash_line.nii.gz
+++ Using blowup factor: 4
+++ Using opacity:  9
+++ Making temporary work directory to copy vis files: ./__tmp_chauf_cKlTweBnBVf
+++ Converted 0 to labels
+++ Final subbrick indices: 0 0 0
+++ Copy ulay to visualize (volumetric) within user's range:
+++ Ulay to be visualized within user range:
+  [0%, 98%] -> [0.000000, 1.000000]
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ././__tmp_chauf_cKlTweBnBVf/tmp_ulay.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+[7m*+ WARNING:[0m output sub-brick 0 is all zeros!
+++ Output dataset ././__tmp_chauf_cKlTweBnBVf/tmp_olay.nii
+++ User-entered function range value value (1)
+++ Dimensions (xyzt): 102 197 75 1
+++ (initial) Slice spacing ordered (x,y,z) is:  102 197 75
+++ Will have user's chosen: SET_DICOM_XYZ -4.00 -0.80 0.01
+
+------------------- end of optionizing -------------------
+
+ -- trying to start Xvfb :145 
+[1] 116365
++/local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_WT/allMice.average.stim.results/vlines.pb00.tcat/__tmp_chauf_cKlTweBnBVf++ Writing one 788x300 image to filter '/bin/pnmtopng -compression 9 > ./img_r01_03.sag.png'
+
+AFNI QUITTs!
+
++++ Command Echo:
+   afni -q -no1D -noplugins -no_detach -com SWITCH_UNDERLAY tmp_ulay.nii -com SWITCH_OVERLAY  tmp_olay.nii -com SEE_OVERLAY     + -com OPEN_WINDOW sagittalimage opacity=9 mont=1x1:102:0:black crop=0:0,0:0  -com OPEN_WINDOW coronalimage  opacity=9 mont=1x1:197:0:black crop=0:0,0:0  -com OPEN_WINDOW axialimage    opacity=9 mont=1x1:75:0:black crop=0:0,0:0  -com SET_PBAR_ALL    +99 1 Reds_and_Blues_Inv -com DO_NOTHING -com SET_SUBBRICKS   0 0 0 -com SET_ULAY_RANGE A.all 0.000000 1.000000 -com SET_FUNC_RANGE  1 -com SET_THRESHNEW   0.5 * -com SET_FUNC_ALPHA  Yes -com SET_FUNC_BOXED  Yes -com SET_FUNC_RESAM  NN.NN -com SET_XHAIRS      OFF -com SET_XHAIR_GAP   -1 -com SET_DICOM_XYZ -4.00 -0.80 0.01 -com SAVE_PNG sagittalimage ./img_r01_03.sag blowup=4 -com QUITT ./__tmp_chauf_cKlTweBnBVf 
+
+
++* Removing temporary image directory './__tmp_chauf_cKlTweBnBVf'.
+
+[1]  + Done                          Xvfb :145 -screen 0 1024x768x24
+
+++ DONE (good exit)
+   see: ./img_r01_03*
+
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+[7m*+ WARNING:[0m input 'a' is not used in the expression
+++ Symbol k using predefined value
+++ Symbol x using predefined value
+++ Symbol y using predefined value
+[7m*+ WARNING:[0m output sub-brick 0 is all zeros!
+++ Output dataset ./__tmp_dash_line.nii.gz
+++ olay_alpha has known value: Yes
+++ My command:
+   @chauffeur_afni -ulay var.1.scale.r01.nii.gz -olay __tmp_dash_line.nii.gz -pbar_posonly -cbar Reds_and_Blues_Inv -func_range 1 -set_subbricks 0 0 0 -thr_olay 0.5 -olay_alpha Yes -olay_boxed Yes -set_dicom_xyz 3.90 -0.80 0.01 -opacity 9 -blowup 4 -no_cor -no_axi -montx 1 -monty 1 -prefix img_r01_04 -set_xhairs OFF -label_mode 0
+
+++ Using AFNI ver : AFNI_23.0.02
+++ chauffeur ver  : 6.52
+
+------------------ start of optionizing ------------------
+
+++ Found input file:   var.1.scale.r01.nii.gz
+++ Found input file:   __tmp_dash_line.nii.gz
+++ Using blowup factor: 4
+++ Using opacity:  9
+++ Making temporary work directory to copy vis files: ./__tmp_chauf_JcXl7g42QNz
+++ Converted 0 to labels
+++ Final subbrick indices: 0 0 0
+++ Copy ulay to visualize (volumetric) within user's range:
+++ Ulay to be visualized within user range:
+  [0%, 98%] -> [0.000000, 1.000000]
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ././__tmp_chauf_JcXl7g42QNz/tmp_ulay.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+[7m*+ WARNING:[0m output sub-brick 0 is all zeros!
+++ Output dataset ././__tmp_chauf_JcXl7g42QNz/tmp_olay.nii
+++ User-entered function range value value (1)
+++ Dimensions (xyzt): 102 197 75 1
+++ (initial) Slice spacing ordered (x,y,z) is:  102 197 75
+++ Will have user's chosen: SET_DICOM_XYZ 3.90 -0.80 0.01
+
+------------------- end of optionizing -------------------
+
+ -- trying to start Xvfb :361 
+[1] 116619
++/local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_WT/allMice.average.stim.results/vlines.pb00.tcat/__tmp_chauf_JcXl7g42QNz++ Writing one 788x300 image to filter '/bin/pnmtopng -compression 9 > ./img_r01_04.sag.png'
+
+AFNI QUITTs!
+
++++ Command Echo:
+   afni -q -no1D -noplugins -no_detach -com SWITCH_UNDERLAY tmp_ulay.nii -com SWITCH_OVERLAY  tmp_olay.nii -com SEE_OVERLAY     + -com OPEN_WINDOW sagittalimage opacity=9 mont=1x1:102:0:black crop=0:0,0:0  -com OPEN_WINDOW coronalimage  opacity=9 mont=1x1:197:0:black crop=0:0,0:0  -com OPEN_WINDOW axialimage    opacity=9 mont=1x1:75:0:black crop=0:0,0:0  -com SET_PBAR_ALL    +99 1 Reds_and_Blues_Inv -com DO_NOTHING -com SET_SUBBRICKS   0 0 0 -com SET_ULAY_RANGE A.all 0.000000 1.000000 -com SET_FUNC_RANGE  1 -com SET_THRESHNEW   0.5 * -com SET_FUNC_ALPHA  Yes -com SET_FUNC_BOXED  Yes -com SET_FUNC_RESAM  NN.NN -com SET_XHAIRS      OFF -com SET_XHAIR_GAP   -1 -com SET_DICOM_XYZ 3.90 -0.80 0.01 -com SAVE_PNG sagittalimage ./img_r01_04.sag blowup=4 -com QUITT ./__tmp_chauf_JcXl7g42QNz 
+
+
++* Removing temporary image directory './__tmp_chauf_JcXl7g42QNz'.
+
+[1]    Done                          Xvfb :361 -screen 0 1024x768x24
+
+++ DONE (good exit)
+   see: ./img_r01_04*
+
++++ Have 4 images. Will wrap to fill 7x1 matrix
++++ Transforming all input to rgb for a good reason 
++++ Writing image to QC_var_lines.jpg
++++ Arranging 4 images (each 788x300) into a 7x1 matrix.
+You can view image QC_var_lines.jpg with:
+ aiv QC_var_lines.jpg 
+++ have do_clean, removing time series...
+
+
+== found questionable regions across inputs: 4
+   found questionable intersected regions  : 4
+
+=============== bad_coords.inter.txt ===============
+  -3.40   -2.50    0.01
+   3.30   -2.50    0.01
+  -4.00   -0.80    0.01
+   3.90   -0.80    0.01
+
+=============== bad_coords.r01.txt ===============
+  -3.40   -2.50    0.01
+   3.30   -2.50    0.01
+  -4.00   -0.80    0.01
+   3.90   -0.80    0.01
+

@@ -1,0 +1,11 @@
+
+initial DF                   : 205 : 100.0%
+
+DF used for regs of interest :   1 :   0.5%
+DF used for censoring        :   0 :   0.0%
+DF used for polort           :   4 :   2.0%
+DF used for motion           :  12 :   5.9%
+total DF used                :  17 :   8.3%
+
+final DF                     : 188 :  91.7%
+

@@ -1,0 +1,943 @@
+++ pbar name has known extension: jpg
+++ My command:
+   @chauffeur_afni -ulay vr_base+orig.HEAD -olay vr_base+orig.HEAD -ulay_range_nz 0 1.014583 -func_range 1.014583 -box_focus_slices AMASK_FOCUS_ULAY -cbar gray_scale -pbar_posonly -pbar_saveim QC_allMice.average.stim/media/qc_00_vorig_EPI.pbar.jpg -pbar_comm_range 98%ile in vol -pbar_for dset -prefix QC_allMice.average.stim/media/qc_00_vorig_EPI -save_ftype JPEG -blowup 4 -opacity 9 -montx 7 -monty 1 -montgap 1 -montcolor black -set_xhairs OFF -label_mode 1 -label_size 4 -no_cor -do_clean
+
+++ Using AFNI ver : AFNI_23.0.02
+++ chauffeur ver  : 6.52
+
+------------------ start of optionizing ------------------
+
+++ Found input file:   vr_base+orig.HEAD
+++ Found input file:   vr_base+orig.HEAD
+++ Using blowup factor: 4
+++ Using opacity:  9
+++ Making temporary work directory to copy vis files: QC_allMice.average.stim/media/__tmp_chauf_9wFmtTg6q8A
+++ Converted 0 to labels
+++ Final subbrick indices: -1 -1 -1
+++ Copy ulay to visualize (volumetric) within user's range:
+++ Ulay to be visualized within user range:
+   [0, 1.014583]
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__tmp_chauf_9wFmtTg6q8A/tmp_ulay.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__tmp_chauf_9wFmtTg6q8A/tmp_olay.nii
+++ User-entered function range value value (1.014583)
+++ Dimensions (xyzt): 102 197 75 1
+++ (initial) Slice spacing ordered (x,y,z) is:  14 28 10
+++ 3dAutomask: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: Emperor Zhark
+++ 3dAutobox: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Auto bbox: x=7..94  y=41..137  z=7..66
+++ 3dAutobox: output dataset = QC_allMice.average.stim/media/__tmp_chauf_9wFmtTg6q8A/ulay_box_0.nii
+++ 3dmaskdump: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Executing 3dcalc()
+ argv[0]=3dcalc argv[1]=-a argv[2]=QC_allMice.average.stim/media/__tmp_chauf_9wFmtTg6q8A/ulay_box_0.nii[0] argv[3]=-expr argv[4]=a argv[5]=-byte argv[6]=-session argv[7]=/home/scratch argv[8]=-prefix argv[9]=3dcalc_AFN_MgwZqr9FxSK39Sf_6Q4D9g argv[10]=-verbose
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Computing sub-brick 0
+++ Scaling output to type byte brick(s)
+++ Sub-brick 0: no scale factor
+++ Computing output statistics
+++ 512160 voxels in the entire dataset (no mask)
+++ 1 voxels in the boxes and/or balls
+++ Using only the boxes+balls mask
+++ How many coors? 3
+++ Will have the ref box central coors : SET_DICOM_XYZ 0.041 0.8895 0.009
+++ Will have the ref box central gapord: 12 13 8
+
+------------------- end of optionizing -------------------
+
+ -- trying to start Xvfb :586 
+[1] 173194
++/local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_AD/allMice.average.stim.results/QC_allMice.average.stim/media/__tmp_chauf_9wFmtTg6q8A++ Writing palette image to QC_allMice.average.stim/media/qc_00_vorig_EPI.pbar.jpg
+++ Writing one 2880x788 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > QC_allMice.average.stim/media/qc_00_vorig_EPI.axi.jpg'
+++ Writing one 5540x300 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > QC_allMice.average.stim/media/qc_00_vorig_EPI.sag.jpg'
+
+AFNI QUITTs!
+
++++ Command Echo:
+   afni -q -no1D -noplugins -no_detach -com SWITCH_UNDERLAY tmp_ulay.nii -com SWITCH_OVERLAY  tmp_olay.nii -com SEE_OVERLAY     + -com OPEN_WINDOW sagittalimage opacity=9 mont=7x1:12:1:black crop=0:0,0:0  -com OPEN_WINDOW coronalimage  opacity=9 mont=7x1:13:1:black crop=0:0,0:0  -com OPEN_WINDOW axialimage    opacity=9 mont=7x1:8:1:black crop=0:0,0:0  -com SET_PBAR_ALL    +99 1 gray_scale -com PBAR_SAVEIM QC_allMice.average.stim/media/qc_00_vorig_EPI.pbar.jpg dim=64x512H -com SET_SUBBRICKS   -1 -1 -1 -com SET_ULAY_RANGE A.all 0 1.014583 -com SET_FUNC_RANGE  1.014583 -com SET_THRESHNEW   0 * -com SET_FUNC_ALPHA  No -com SET_FUNC_BOXED  No -com SET_FUNC_RESAM  NN.NN -com SET_XHAIRS      OFF -com SET_XHAIR_GAP   -1 -com SET_DICOM_XYZ 0.041 0.8895 0.009 -com SAVE_JPEG axialimage    QC_allMice.average.stim/media/qc_00_vorig_EPI.axi blowup=4 -com SAVE_JPEG sagittalimage QC_allMice.average.stim/media/qc_00_vorig_EPI.sag blowup=4 -com QUITT QC_allMice.average.stim/media/__tmp_chauf_9wFmtTg6q8A 
+
+
++* Removing temporary image directory 'QC_allMice.average.stim/media/__tmp_chauf_9wFmtTg6q8A'.
+
+[1]    Done                          Xvfb :586 -screen 0 1024x768x24
+
+++ DONE (good exit)
+   see: QC_allMice.average.stim/media/qc_00_vorig_EPI*
+
+++ pbar name has known extension: jpg
+++ My command:
+   @chauffeur_afni -ulay ambmc_ori_100+orig.HEAD -olay ambmc_ori_100+orig.HEAD -ulay_range_nz 0 10602715.785654 -func_range 10602715.785654 -box_focus_slices AMASK_FOCUS_ULAY -cbar gray_scale -pbar_posonly -pbar_saveim QC_allMice.average.stim/media/qc_01_vorig_anat.pbar.jpg -pbar_comm_range 98%ile in vol -pbar_for dset -prefix QC_allMice.average.stim/media/qc_01_vorig_anat -save_ftype JPEG -blowup 4 -opacity 9 -montx 7 -monty 1 -montgap 1 -montcolor black -set_xhairs OFF -label_mode 1 -label_size 4 -no_cor -do_clean
+
+++ Using AFNI ver : AFNI_23.0.02
+++ chauffeur ver  : 6.52
+
+------------------ start of optionizing ------------------
+
+++ Found input file:   ambmc_ori_100+orig.HEAD
+++ Found input file:   ambmc_ori_100+orig.HEAD
+++ Using blowup factor: 4
+++ Using opacity:  9
+++ Making temporary work directory to copy vis files: QC_allMice.average.stim/media/__tmp_chauf_6WgEgpjH2mx
+++ Converted 0 to labels
+++ Final subbrick indices: -1 -1 -1
+++ Copy ulay to visualize (volumetric) within user's range:
+++ Ulay to be visualized within user range:
+   [0, 10602715.785654]
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__tmp_chauf_6WgEgpjH2mx/tmp_ulay.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__tmp_chauf_6WgEgpjH2mx/tmp_olay.nii
+++ User-entered function range value value (10602715.785654)
+++ Dimensions (xyzt): 102 197 75 1
+++ (initial) Slice spacing ordered (x,y,z) is:  14 28 10
+++ 3dAutomask: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: Emperor Zhark
+++ 3dAutobox: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Auto bbox: x=7..94  y=11..191  z=7..67
+++ 3dAutobox: output dataset = QC_allMice.average.stim/media/__tmp_chauf_6WgEgpjH2mx/ulay_box_0.nii
+++ 3dmaskdump: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Executing 3dcalc()
+ argv[0]=3dcalc argv[1]=-a argv[2]=QC_allMice.average.stim/media/__tmp_chauf_6WgEgpjH2mx/ulay_box_0.nii[0] argv[3]=-expr argv[4]=a argv[5]=-byte argv[6]=-session argv[7]=/home/scratch argv[8]=-prefix argv[9]=3dcalc_AFN_BYBlXXUvMtnysBOzAGtNdQ argv[10]=-verbose
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Computing sub-brick 0
+++ Scaling output to type byte brick(s)
+++ Sub-brick 0: no scale factor
+++ Computing output statistics
+++ 971608 voxels in the entire dataset (no mask)
+++ 1 voxels in the boxes and/or balls
+++ Using only the boxes+balls mask
+++ How many coors? 3
+++ Will have the ref box central coors : SET_DICOM_XYZ 0.041 -0.3105 0.009
+++ Will have the ref box central gapord: 12 25 8
+
+------------------- end of optionizing -------------------
+
+ -- trying to start Xvfb :192 
+[1] 173509
++/local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_AD/allMice.average.stim.results/QC_allMice.average.stim/media/__tmp_chauf_6WgEgpjH2mx++ Writing palette image to QC_allMice.average.stim/media/qc_01_vorig_anat.pbar.jpg
+++ Writing one 2880x788 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > QC_allMice.average.stim/media/qc_01_vorig_anat.axi.jpg'
+++ Writing one 5540x300 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > QC_allMice.average.stim/media/qc_01_vorig_anat.sag.jpg'
+
+AFNI QUITTs!
+
++++ Command Echo:
+   afni -q -no1D -noplugins -no_detach -com SWITCH_UNDERLAY tmp_ulay.nii -com SWITCH_OVERLAY  tmp_olay.nii -com SEE_OVERLAY     + -com OPEN_WINDOW sagittalimage opacity=9 mont=7x1:12:1:black crop=0:0,0:0  -com OPEN_WINDOW coronalimage  opacity=9 mont=7x1:25:1:black crop=0:0,0:0  -com OPEN_WINDOW axialimage    opacity=9 mont=7x1:8:1:black crop=0:0,0:0  -com SET_PBAR_ALL    +99 1 gray_scale -com PBAR_SAVEIM QC_allMice.average.stim/media/qc_01_vorig_anat.pbar.jpg dim=64x512H -com SET_SUBBRICKS   -1 -1 -1 -com SET_ULAY_RANGE A.all 0 10602715.785654 -com SET_FUNC_RANGE  10602715.785654 -com SET_THRESHNEW   0 * -com SET_FUNC_ALPHA  No -com SET_FUNC_BOXED  No -com SET_FUNC_RESAM  NN.NN -com SET_XHAIRS      OFF -com SET_XHAIR_GAP   -1 -com SET_DICOM_XYZ 0.041 -0.3105 0.009 -com SAVE_JPEG axialimage    QC_allMice.average.stim/media/qc_01_vorig_anat.axi blowup=4 -com SAVE_JPEG sagittalimage QC_allMice.average.stim/media/qc_01_vorig_anat.sag blowup=4 -com QUITT QC_allMice.average.stim/media/__tmp_chauf_6WgEgpjH2mx 
+
+
++* Removing temporary image directory 'QC_allMice.average.stim/media/__tmp_chauf_6WgEgpjH2mx'.
+
+[1]    Done                          Xvfb :192 -screen 0 1024x768x24
+
+++ DONE (good exit)
+   see: QC_allMice.average.stim/media/qc_01_vorig_anat*
+
+++ Prepare for running @djunct_overlap_check (ver = 0.46)
+++ Using refbox keyword AMASK_FOCUS_ULAY for box_focus_slices
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__workdir_olap_fAaanFHD2ud/olapch_0_cp_ulay.nii
+++ Just copy olay, bc ulay will get regridded
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__workdir_olap_fAaanFHD2ud/olapch_1_cp_olay.nii
+++ Quietly run: 3drefit -space ORIG olapch_0_cp_ulay.nii
+++ olay_alpha has known value: No
+
+
+++ My command:
+   @chauffeur_afni -ulay olapch_0_cp_ulay.nii -box_focus_slices AMASK_FOCUS_ULAY -olay olapch_1_cp_olay.nii -ulay_range 0% 98% -func_range_perc_nz 98 -cbar Reds_and_Blues -pbar_posonly -set_subbricks 0 0 0 -olay_alpha No -olay_boxed No -opacity 4 -zerocolor black -prefix img00 -montx 7 -monty 1 -montgap 1 -montcolor black -save_ftype JPEG -set_xhairs OFF -label_mode 1 -label_size 4 -do_clean -no_cor -no_axi -pass -pass
+
+++ Using AFNI ver : AFNI_23.0.02
+++ chauffeur ver  : 6.52
+
+------------------ start of optionizing ------------------
+
+++ Found input file:   olapch_0_cp_ulay.nii
+++ Found input file:   olapch_1_cp_olay.nii
+++ Using blowup factor: 2
+++ Using opacity:  4
+++ Making temporary work directory to copy vis files: ./__tmp_chauf_3TqzcCvDd8i
+++ Converted 0 to labels
+++ Final subbrick indices: 0 0 0
+++ Copy ulay to visualize (volumetric) within user's range:
+++ Ulay to be visualized within user range:
+  [0%, 98%] -> [1124061.375000, 10602716.000000]
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ././__tmp_chauf_3TqzcCvDd8i/tmp_ulay.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ././__tmp_chauf_3TqzcCvDd8i/tmp_olay.nii
+++ For olay, the 98%ile value leads to
+   --> upper range value: 2.022088
+++ Dimensions (xyzt): 102 197 75 1
+++ (initial) Slice spacing ordered (x,y,z) is:  14 28 10
+++ 3dAutomask: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: Emperor Zhark
+++ 3dAutobox: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Auto bbox: x=7..94  y=11..191  z=7..67
+++ 3dAutobox: output dataset = ./__tmp_chauf_3TqzcCvDd8i/ulay_box_0.nii
+++ 3dmaskdump: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Executing 3dcalc()
+ argv[0]=3dcalc argv[1]=-a argv[2]=./__tmp_chauf_3TqzcCvDd8i/ulay_box_0.nii[0] argv[3]=-expr argv[4]=a argv[5]=-byte argv[6]=-session argv[7]=/home/scratch argv[8]=-prefix argv[9]=3dcalc_AFN_JUUClwvSQG6MduYfp_L5AA argv[10]=-verbose
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Computing sub-brick 0
+++ Scaling output to type byte brick(s)
+++ Sub-brick 0: no scale factor
+++ Computing output statistics
+++ 971608 voxels in the entire dataset (no mask)
+++ 1 voxels in the boxes and/or balls
+++ Using only the boxes+balls mask
+++ How many coors? 3
+++ Will have the ref box central coors : SET_DICOM_XYZ 0.041 -0.3105 0.009
+++ Will have the ref box central gapord: 12 25 8
+
+------------------- end of optionizing -------------------
+
+ -- trying to start Xvfb :581 
+[1] 173874
++/local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_AD/allMice.average.stim.results/QC_allMice.average.stim/media/__workdir_olap_fAaanFHD2ud/__tmp_chauf_3TqzcCvDd8i++ Writing one 2770x150 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > ./img00.sag.jpg'
+
+AFNI QUITTs!
+
++++ Command Echo:
+   afni -q -no1D -noplugins -no_detach -com SWITCH_UNDERLAY tmp_ulay.nii -com SWITCH_OVERLAY  tmp_olay.nii -com SEE_OVERLAY     + -com OPEN_WINDOW sagittalimage opacity=4 mont=7x1:12:1:black crop=0:0,0:0  -com OPEN_WINDOW coronalimage  opacity=4 mont=7x1:25:1:black crop=0:0,0:0  -com OPEN_WINDOW axialimage    opacity=4 mont=7x1:8:1:black crop=0:0,0:0  -com SET_PBAR_ALL    +99 1 Reds_and_Blues -com DO_NOTHING -com SET_SUBBRICKS   0 0 0 -com SET_ULAY_RANGE A.all 1124061.375000 10602716.000000 -com SET_FUNC_RANGE  2.022088 -com SET_THRESHNEW   0 * -com SET_FUNC_ALPHA  No -com SET_FUNC_BOXED  No -com SET_FUNC_RESAM  NN.NN -com SET_XHAIRS      OFF -com SET_XHAIR_GAP   -1 -com SET_DICOM_XYZ 0.041 -0.3105 0.009 -com SAVE_JPEG sagittalimage ./img00.sag blowup=2 -com QUITT ./__tmp_chauf_3TqzcCvDd8i 
+
+
++* Removing temporary image directory './__tmp_chauf_3TqzcCvDd8i'.
+
+[1]  + Done                          Xvfb :581 -screen 0 1024x768x24
+
+++ DONE (good exit)
+   see: ./img00*
+
++++ Transforming all input to rgb for a good reason 
++++ Writing image to ../qc_02_vorig_olap.sag.jpg
++++ Arranging 1 images (each 2770x150) into a 1x1 matrix.
+You can view image ../qc_02_vorig_olap.sag.jpg with:
+ aiv ../qc_02_vorig_olap.sag.jpg 
+
++* Removing temporary workdir 'QC_allMice.average.stim/media/__workdir_olap_fAaanFHD2ud*'
+
+
+++ DONE! Image output:
+       QC_allMice.average.stim/media/qc_02_vorig_olap.sag
+
+++ Prepare for running @djunct_edgy_align_check (ver = 1.50)
+++ Copy refbox (anat_final.allMice.average.stim+orig.HEAD) to workdir
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__workdir_EAC_GlSv0FE3g9s/REFBOX.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__workdir_EAC_GlSv0FE3g9s/eac_0_cp.nii
+++ 3dAllineate: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: Zhark the Registrator
+++ Source dataset: /local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_AD/allMice.average.stim.results/QC_allMice.average.stim/media/__workdir_EAC_GlSv0FE3g9s/eac_0_cp.nii
+++ Base dataset:   (not given)
+++ Loading datasets into memory
+ +        -cmass x y z shifts =    0.000    0.000    0.000
+ +  shift search range is +/- =    3.242    6.292    2.375
+++ OpenMP thread count = 15
+++ ========== Applying transformation to 1 sub-bricks ==========
+++ wsinc5 interpolation setup:
+ +   taper function  = Min sidelobe 3 term
+ +   taper cut point = 0.000
+ +   window radius   = 5 voxels
+ +   window shape    = Cubical
+ +   The above can be altered via the AFNI_WSINC5_* environment variables.
+ +  (To avoid this message, 'setenv AFNI_WSINC5_SILENT YES'.)
+ +   wsinc5 CUBE(5) mask has 1000 points
+++ Output dataset QC_allMice.average.stim/media/__workdir_EAC_GlSv0FE3g9s/eac_1_grid2olay.nii
+++ 3dAllineate: total CPU time = 0.0 sec  Elapsed = 0.3
+++ ###########################################################
+++ Output dataset ./eac_2_ulay_shrp.nii
+++ Just copy olay, bc ulay will get regridded
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__workdir_EAC_GlSv0FE3g9s/eac_3_cp.nii
+++ 3dAutomask: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: Emperor Zhark
+++ Loading dataset eac_3_cp.nii
+++ Forming automask
+ + Fixed clip level = 4840935.500000
+ + Used gradual clip level = 4609507.500000 .. 4908538.000000
+ + Number voxels above clip level = 328703
+ + Clustering voxels ...
+ + Largest cluster has 328687 voxels
+ + Clustering voxels ...
+ + Largest cluster has 328134 voxels
+ + Filled  1720 voxels in small holes; now have 329854 voxels
+ + Filled  4492 voxels in large holes; now have 334346 voxels
+ + Clustering voxels ...
+ + Largest cluster has 334346 voxels
+ + Clustering non-brain voxels ...
+ + Clustering voxels ...
+ + Largest cluster has 1172704 voxels
+ + Mask now has 334346 voxels
+++ 334346 voxels in the mask [out of 1507050: 22.19%]
+++ first   7 x-planes are zero [from L]
+++ last    7 x-planes are zero [from R]
+++ first  12 y-planes are zero [from P]
+++ last    8 y-planes are zero [from A]
+++ first   7 z-planes are zero [from I]
+++ last    8 z-planes are zero [from S]
+++ Output dataset ./eac_4_mask.nii
+++ CPU time = 0.000000 sec
+++ 3dMedianFilter: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Output dataset ./eac_5_mfilt.nii
+++ 3dedge3: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ olay_alpha has known value: No
+
+++ My command:
+   @chauffeur_afni -ulay eac_2_ulay_shrp.nii -box_focus_slices REFBOX.nii -olay eac_6_edgy.nii -ulay_range_am 1% 95% -ulay_min_fac 0.2 -func_range_perc_nz 33 -cbar Reds_and_Blues_Inv -set_subbricks 0 0 0 -olay_alpha No -olay_boxed No -thr_olay 301192.000000 -opacity 9 -prefix ../qc_03_ve2a_epi2anat -montx 7 -monty 1 -montgap 1 -montcolor black -save_ftype JPEG -set_xhairs OFF -label_mode 1 -label_size 4 -do_clean -no_cor -pass
+
+++ Using AFNI ver : AFNI_23.0.02
+++ chauffeur ver  : 6.52
+
+------------------ start of optionizing ------------------
+
+++ Found input file:   eac_2_ulay_shrp.nii
+++ Found input file:   eac_6_edgy.nii
+++ Found focus refbox file:   REFBOX.nii
+++ Using blowup factor: 2
+++ Using opacity:  9
+++ Making temporary work directory to copy vis files: ../__tmp_chauf_tN4HA58dOoD
+++ Converted 0 to labels
+++ Final subbrick indices: 0 0 0
+++ Copy ulay to visualize (volumetric) within user's range:
+++ Use umin factor     : 0.2
+   Init. umin and umax : -3.292033, 3.314435
+(standard_in) 1: syntax error
+(standard_in) 1: syntax error
+++ Ulay to be visualized within user range (adjusted by umin_fac):
+  [1%, 95%] -> [0, 3.314435]
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./../__tmp_chauf_tN4HA58dOoD/tmp_ulay.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./../__tmp_chauf_tN4HA58dOoD/tmp_olay.nii
+++ For olay, the 33%ile value leads to
+   --> upper range value: 1673272.500000
+++ Dimensions (xyzt): 102 197 75 1
+++ (initial) Slice spacing ordered (x,y,z) is:  14 28 10
+++ 3dAutobox: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Auto bbox: x=0..101  y=0..196  z=0..74
+++ THD_zeropad: all pad values are zero - just copying dataset
+++ 3dAutobox: output dataset = ../__tmp_chauf_tN4HA58dOoD/ulay_box_0.nii
+++ 3dmaskdump: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Executing 3dcalc()
+ argv[0]=3dcalc argv[1]=-a argv[2]=../__tmp_chauf_tN4HA58dOoD/ulay_box_0.nii[0] argv[3]=-expr argv[4]=a argv[5]=-byte argv[6]=-session argv[7]=/home/scratch argv[8]=-prefix argv[9]=3dcalc_AFN_-A0vwCmCB32QoMRq0WOQfA argv[10]=-verbose
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Computing sub-brick 0
+++ Scaling output to type byte brick(s)
+++ Sub-brick 0 scale factor = 0.000019
+++ Computing output statistics
+++ Output dataset /home/scratch/3dcalc_AFN_-A0vwCmCB32QoMRq0WOQfA+orig.BRIK
+++ 1507050 voxels in the entire dataset (no mask)
+++ 1 voxels in the boxes and/or balls
+++ Using only the boxes+balls mask
+++ How many coors? 3
+++ Will have the ref box central coors : SET_DICOM_XYZ 0.041 -0.0105 0.009
+++ Will have the ref box central gapord: 14 28 10
+
+------------------- end of optionizing -------------------
+
+ -- trying to start Xvfb :985 
+[1] 174267
++/local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_AD/allMice.average.stim.results/QC_allMice.average.stim/media/__tmp_chauf_tN4HA58dOoD[7m*+ WARNING:[0m Bad drive AFNI result from 'SET_THRESHNEW   301192.000000 *'
+++ Writing one 1440x394 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > ../qc_03_ve2a_epi2anat.axi.jpg'
+++ Writing one 2770x150 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > ../qc_03_ve2a_epi2anat.sag.jpg'
+
+AFNI QUITTs!
+
++++ Command Echo:
+   afni -q -no1D -noplugins -no_detach -com SWITCH_UNDERLAY tmp_ulay.nii -com SWITCH_OVERLAY  tmp_olay.nii -com SEE_OVERLAY     + -com OPEN_WINDOW sagittalimage opacity=9 mont=7x1:14:1:black crop=0:0,0:0  -com OPEN_WINDOW coronalimage  opacity=9 mont=7x1:28:1:black crop=0:0,0:0  -com OPEN_WINDOW axialimage    opacity=9 mont=7x1:10:1:black crop=0:0,0:0  -com SET_PBAR_ALL    -99 1 Reds_and_Blues_Inv -com DO_NOTHING -com SET_SUBBRICKS   0 0 0 -com SET_ULAY_RANGE A.all 0 3.314435 -com SET_FUNC_RANGE  1673272.500000 -com SET_THRESHNEW   301192.000000 * -com SET_FUNC_ALPHA  No -com SET_FUNC_BOXED  No -com SET_FUNC_RESAM  NN.NN -com SET_XHAIRS      OFF -com SET_XHAIR_GAP   -1 -com SET_DICOM_XYZ 0.041 -0.0105 0.009 -com SAVE_JPEG axialimage    ../qc_03_ve2a_epi2anat.axi blowup=2 -com SAVE_JPEG sagittalimage ../qc_03_ve2a_epi2anat.sag blowup=2 -com QUITT ../__tmp_chauf_tN4HA58dOoD 
+
+
++* Removing temporary image directory '../__tmp_chauf_tN4HA58dOoD'.
+
+[1]    Done                          Xvfb :985 -screen 0 1024x768x24
+
+++ DONE (good exit)
+   see: ../qc_03_ve2a_epi2anat*
+
+
++* Removing temporary workdir 'QC_allMice.average.stim/media/__workdir_EAC_GlSv0FE3g9s*'
+
+
+++ DONE! Image output:
+       QC_allMice.average.stim/media/qc_03_ve2a_epi2anat
+
+++ olay_alpha has known value: No
+++ My command:
+   @chauffeur_afni -ulay anat_final.allMice.average.stim+orig.HEAD -box_focus_slices anat_final.allMice.average.stim+orig.HEAD -olay mask_import_100mask+orig.HEAD -cbar Reds_and_Blues_Inv -ulay_range 0% 120% -func_range 1 -olay_alpha No -olay_boxed No -set_subbricks 0 0 0 -opacity 4 -prefix QC_allMice.average.stim/media/qc_04_ve2a_mask2final -save_ftype JPEG -montx 7 -monty 1 -montgap 1 -montcolor black -set_xhairs OFF -label_mode 1 -label_size 4 -no_cor -do_clean
+
+++ Using AFNI ver : AFNI_23.0.02
+++ chauffeur ver  : 6.52
+
+------------------ start of optionizing ------------------
+
+++ Found input file:   anat_final.allMice.average.stim+orig.HEAD
+++ Found input file:   mask_import_100mask+orig.HEAD
+++ Found focus refbox file:   anat_final.allMice.average.stim+orig.HEAD
+++ Using blowup factor: 2
+++ Using opacity:  4
+++ Making temporary work directory to copy vis files: QC_allMice.average.stim/media/__tmp_chauf_RpqLd8KCL82
+++ Converted 0 to labels
+++ Final subbrick indices: 0 0 0
+++ Copy ulay to visualize (volumetric) within user's range:
+++ Ulay range calc for >100%ile ulay max:
+   calculating 98%ile value, and then
+   multiplying it by a scale factor = 1.22448,
+   in order to produce the 98%ile value
+++ Ulay to be visualized within user range:
+  [0%, 120%] -> [1124061.322594, 12982813.425217]
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__tmp_chauf_RpqLd8KCL82/tmp_ulay.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__tmp_chauf_RpqLd8KCL82/tmp_olay.nii
+++ User-entered function range value value (1)
+++ Dimensions (xyzt): 102 197 75 1
+++ (initial) Slice spacing ordered (x,y,z) is:  14 28 10
+++ 3dAutobox: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Auto bbox: x=0..101  y=0..196  z=0..74
+++ THD_zeropad: all pad values are zero - just copying dataset
+++ 3dAutobox: output dataset = QC_allMice.average.stim/media/__tmp_chauf_RpqLd8KCL82/ulay_box_0.nii
+++ 3dmaskdump: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Executing 3dcalc()
+ argv[0]=3dcalc argv[1]=-a argv[2]=QC_allMice.average.stim/media/__tmp_chauf_RpqLd8KCL82/ulay_box_0.nii[0] argv[3]=-expr argv[4]=a argv[5]=-byte argv[6]=-session argv[7]=/home/scratch argv[8]=-prefix argv[9]=3dcalc_AFN_IjBLgKpYwmacsatBDZNvww argv[10]=-verbose
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Computing sub-brick 0
+++ Scaling output to type byte brick(s)
+++ Sub-brick 0 scale factor = 0.000019
+++ Computing output statistics
+++ Output dataset /home/scratch/3dcalc_AFN_IjBLgKpYwmacsatBDZNvww+orig.BRIK
+++ 1507050 voxels in the entire dataset (no mask)
+++ 1 voxels in the boxes and/or balls
+++ Using only the boxes+balls mask
+++ How many coors? 3
+++ Will have the ref box central coors : SET_DICOM_XYZ 0.041 -0.0105 0.009
+++ Will have the ref box central gapord: 14 28 10
+
+------------------- end of optionizing -------------------
+
+ -- trying to start Xvfb :693 
+[1] 174591
++/local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_AD/allMice.average.stim.results/QC_allMice.average.stim/media/__tmp_chauf_RpqLd8KCL82++ Writing one 1440x394 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > QC_allMice.average.stim/media/qc_04_ve2a_mask2final.axi.jpg'
+++ Writing one 2770x150 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > QC_allMice.average.stim/media/qc_04_ve2a_mask2final.sag.jpg'
+
+AFNI QUITTs!
+
++++ Command Echo:
+   afni -q -no1D -noplugins -no_detach -com SWITCH_UNDERLAY tmp_ulay.nii -com SWITCH_OVERLAY  tmp_olay.nii -com SEE_OVERLAY     + -com OPEN_WINDOW sagittalimage opacity=4 mont=7x1:14:1:black crop=0:0,0:0  -com OPEN_WINDOW coronalimage  opacity=4 mont=7x1:28:1:black crop=0:0,0:0  -com OPEN_WINDOW axialimage    opacity=4 mont=7x1:10:1:black crop=0:0,0:0  -com SET_PBAR_ALL    -99 1 Reds_and_Blues_Inv -com DO_NOTHING -com SET_SUBBRICKS   0 0 0 -com SET_ULAY_RANGE A.all 1124061.322594 12982813.425217 -com SET_FUNC_RANGE  1 -com SET_THRESHNEW   0 * -com SET_FUNC_ALPHA  No -com SET_FUNC_BOXED  No -com SET_FUNC_RESAM  NN.NN -com SET_XHAIRS      OFF -com SET_XHAIR_GAP   -1 -com SET_DICOM_XYZ 0.041 -0.0105 0.009 -com SAVE_JPEG axialimage    QC_allMice.average.stim/media/qc_04_ve2a_mask2final.axi blowup=2 -com SAVE_JPEG sagittalimage QC_allMice.average.stim/media/qc_04_ve2a_mask2final.sag blowup=2 -com QUITT QC_allMice.average.stim/media/__tmp_chauf_RpqLd8KCL82 
+
+
++* Removing temporary image directory 'QC_allMice.average.stim/media/__tmp_chauf_RpqLd8KCL82'.
+
+[1]    Done                          Xvfb :693 -screen 0 1024x768x24
+
+++ DONE (good exit)
+   see: QC_allMice.average.stim/media/qc_04_ve2a_mask2final*
+
+++ olay_alpha has known value: Yes
+++ pbar name has known extension: jpg
+++ My command:
+   @chauffeur_afni -ulay anat_final.allMice.average.stim+orig.HEAD -box_focus_slices anat_final.allMice.average.stim+orig.HEAD -olay stats.allMice.average.stim+orig.HEAD -cbar Plasma -pbar_posonly -ulay_range 0% 120% -func_range 63.989124 -thr_olay 10.815075 -olay_alpha Yes -olay_boxed Yes -set_subbricks 0 0 0 -opacity 9 -pbar_saveim QC_allMice.average.stim/media/qc_05_vstat_Full_Fstat.pbar.jpg -pbar_comm_range 99%ile in mask -pbar_comm_thr 90%ile in mask, alpha+boxed on -prefix QC_allMice.average.stim/media/qc_05_vstat_Full_Fstat -save_ftype JPEG -montx 7 -monty 1 -montgap 1 -montcolor black -set_xhairs OFF -label_mode 1 -label_size 4 -no_cor -do_clean
+
+++ Using AFNI ver : AFNI_23.0.02
+++ chauffeur ver  : 6.52
+
+------------------ start of optionizing ------------------
+
+++ Found input file:   anat_final.allMice.average.stim+orig.HEAD
+++ Found input file:   stats.allMice.average.stim+orig.HEAD
+++ Found focus refbox file:   anat_final.allMice.average.stim+orig.HEAD
+++ Using blowup factor: 2
+++ Using opacity:  9
+++ Making temporary work directory to copy vis files: QC_allMice.average.stim/media/__tmp_chauf_ujXYWzAL65B
+++ Converted 0 to labels
+++ Final subbrick indices: 0 0 0
+++ Copy ulay to visualize (volumetric) within user's range:
+++ Ulay range calc for >100%ile ulay max:
+   calculating 98%ile value, and then
+   multiplying it by a scale factor = 1.22448,
+   in order to produce the 98%ile value
+++ Ulay to be visualized within user range:
+  [0%, 120%] -> [1124061.322594, 12982813.425217]
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__tmp_chauf_ujXYWzAL65B/tmp_ulay.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__tmp_chauf_ujXYWzAL65B/tmp_olay.nii
+++ User-entered function range value value (63.989124)
+++ Dimensions (xyzt): 102 197 75 1
+++ (initial) Slice spacing ordered (x,y,z) is:  14 28 10
+++ 3dAutobox: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Auto bbox: x=0..101  y=0..196  z=0..74
+++ THD_zeropad: all pad values are zero - just copying dataset
+++ 3dAutobox: output dataset = QC_allMice.average.stim/media/__tmp_chauf_ujXYWzAL65B/ulay_box_0.nii
+++ 3dmaskdump: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Executing 3dcalc()
+ argv[0]=3dcalc argv[1]=-a argv[2]=QC_allMice.average.stim/media/__tmp_chauf_ujXYWzAL65B/ulay_box_0.nii[0] argv[3]=-expr argv[4]=a argv[5]=-byte argv[6]=-session argv[7]=/home/scratch argv[8]=-prefix argv[9]=3dcalc_AFN_UURNLU8yhc4h28xxNnfHnQ argv[10]=-verbose
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Computing sub-brick 0
+++ Scaling output to type byte brick(s)
+++ Sub-brick 0 scale factor = 0.000019
+++ Computing output statistics
+++ Output dataset /home/scratch/3dcalc_AFN_UURNLU8yhc4h28xxNnfHnQ+orig.BRIK
+++ 1507050 voxels in the entire dataset (no mask)
+++ 1 voxels in the boxes and/or balls
+++ Using only the boxes+balls mask
+++ How many coors? 3
+++ Will have the ref box central coors : SET_DICOM_XYZ 0.041 -0.0105 0.009
+++ Will have the ref box central gapord: 14 28 10
+
+------------------- end of optionizing -------------------
+
+ -- trying to start Xvfb :611 
+[1] 174907
++/local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_AD/allMice.average.stim.results/QC_allMice.average.stim/media/__tmp_chauf_ujXYWzAL65B++ Writing palette image to QC_allMice.average.stim/media/qc_05_vstat_Full_Fstat.pbar.jpg
+++ Writing one 1440x394 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > QC_allMice.average.stim/media/qc_05_vstat_Full_Fstat.axi.jpg'
+++ Writing one 2770x150 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > QC_allMice.average.stim/media/qc_05_vstat_Full_Fstat.sag.jpg'
+
+AFNI QUITTs!
+
++++ Command Echo:
+   afni -q -no1D -noplugins -no_detach -com SWITCH_UNDERLAY tmp_ulay.nii -com SWITCH_OVERLAY  tmp_olay.nii -com SEE_OVERLAY     + -com OPEN_WINDOW sagittalimage opacity=9 mont=7x1:14:1:black crop=0:0,0:0  -com OPEN_WINDOW coronalimage  opacity=9 mont=7x1:28:1:black crop=0:0,0:0  -com OPEN_WINDOW axialimage    opacity=9 mont=7x1:10:1:black crop=0:0,0:0  -com SET_PBAR_ALL    +99 1 Plasma -com PBAR_SAVEIM QC_allMice.average.stim/media/qc_05_vstat_Full_Fstat.pbar.jpg dim=64x512H -com SET_SUBBRICKS   0 0 0 -com SET_ULAY_RANGE A.all 1124061.322594 12982813.425217 -com SET_FUNC_RANGE  63.989124 -com SET_THRESHNEW   10.815075 * -com SET_FUNC_ALPHA  Yes -com SET_FUNC_BOXED  Yes -com SET_FUNC_RESAM  NN.NN -com SET_XHAIRS      OFF -com SET_XHAIR_GAP   -1 -com SET_DICOM_XYZ 0.041 -0.0105 0.009 -com SAVE_JPEG axialimage    QC_allMice.average.stim/media/qc_05_vstat_Full_Fstat.axi blowup=2 -com SAVE_JPEG sagittalimage QC_allMice.average.stim/media/qc_05_vstat_Full_Fstat.sag blowup=2 -com QUITT QC_allMice.average.stim/media/__tmp_chauf_ujXYWzAL65B 
+
+
++* Removing temporary image directory 'QC_allMice.average.stim/media/__tmp_chauf_ujXYWzAL65B'.
+
+[1]  + Done                          Xvfb :611 -screen 0 1024x768x24
+
+++ DONE (good exit)
+   see: QC_allMice.average.stim/media/qc_05_vstat_Full_Fstat*
+
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./__tmp_coef_vol.nii
+
+++ olay_alpha has known value: Yes
+++ pbar name has known extension: jpg
+++ My command:
+   @chauffeur_afni -ulay anat_final.allMice.average.stim+orig.HEAD -box_focus_slices anat_final.allMice.average.stim+orig.HEAD -olay stats.allMice.average.stim+orig.HEAD -cbar Reds_and_Blues_Inv -pass -ulay_range 0% 120% -func_range 1.334006 -thr_olay 3.34303 -olay_alpha Yes -olay_boxed Yes -set_subbricks 0 1 2 -opacity 9 -pbar_saveim QC_allMice.average.stim/media/qc_06_vstat_vis_0_Coef.pbar.jpg -pbar_comm_range 99%ile in suprathresh mask voxels -pbar_comm_thr two-sided p=0.001, alpha+boxed on -prefix QC_allMice.average.stim/media/qc_06_vstat_vis_0_Coef -save_ftype JPEG -montx 7 -monty 1 -montgap 1 -montcolor black -set_xhairs OFF -label_mode 1 -label_size 4 -no_cor -do_clean
+
+++ Using AFNI ver : AFNI_23.0.02
+++ chauffeur ver  : 6.52
+
+------------------ start of optionizing ------------------
+
+++ Found input file:   anat_final.allMice.average.stim+orig.HEAD
+++ Found input file:   stats.allMice.average.stim+orig.HEAD
+++ Found focus refbox file:   anat_final.allMice.average.stim+orig.HEAD
+++ Using blowup factor: 2
+++ Using opacity:  9
+++ Making temporary work directory to copy vis files: QC_allMice.average.stim/media/__tmp_chauf_fVy8zOftOIR
+++ Converted 0 to labels
+++ Final subbrick indices: 0 1 2
+++ Copy ulay to visualize (volumetric) within user's range:
+++ Ulay range calc for >100%ile ulay max:
+   calculating 98%ile value, and then
+   multiplying it by a scale factor = 1.22448,
+   in order to produce the 98%ile value
+++ Ulay to be visualized within user range:
+  [0%, 120%] -> [1124061.322594, 12982813.425217]
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__tmp_chauf_fVy8zOftOIR/tmp_ulay.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__tmp_chauf_fVy8zOftOIR/tmp_olay.nii
+++ User-entered function range value value (1.334006)
+++ Dimensions (xyzt): 102 197 75 1
+++ (initial) Slice spacing ordered (x,y,z) is:  14 28 10
+++ 3dAutobox: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Auto bbox: x=0..101  y=0..196  z=0..74
+++ THD_zeropad: all pad values are zero - just copying dataset
+++ 3dAutobox: output dataset = QC_allMice.average.stim/media/__tmp_chauf_fVy8zOftOIR/ulay_box_0.nii
+++ 3dmaskdump: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Executing 3dcalc()
+ argv[0]=3dcalc argv[1]=-a argv[2]=QC_allMice.average.stim/media/__tmp_chauf_fVy8zOftOIR/ulay_box_0.nii[0] argv[3]=-expr argv[4]=a argv[5]=-byte argv[6]=-session argv[7]=/home/scratch argv[8]=-prefix argv[9]=3dcalc_AFN_cU20T_hLS8LlRGj1UUAQbQ argv[10]=-verbose
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Computing sub-brick 0
+++ Scaling output to type byte brick(s)
+++ Sub-brick 0 scale factor = 0.000019
+++ Computing output statistics
+++ Output dataset /home/scratch/3dcalc_AFN_cU20T_hLS8LlRGj1UUAQbQ+orig.BRIK
+++ 1507050 voxels in the entire dataset (no mask)
+++ 1 voxels in the boxes and/or balls
+++ Using only the boxes+balls mask
+++ How many coors? 3
+++ Will have the ref box central coors : SET_DICOM_XYZ 0.041 -0.0105 0.009
+++ Will have the ref box central gapord: 14 28 10
+
+------------------- end of optionizing -------------------
+
+ -- trying to start Xvfb :410 
+[1] 175445
++/local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_AD/allMice.average.stim.results/QC_allMice.average.stim/media/__tmp_chauf_fVy8zOftOIR++ Writing palette image to QC_allMice.average.stim/media/qc_06_vstat_vis_0_Coef.pbar.jpg
+++ Writing one 1440x394 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > QC_allMice.average.stim/media/qc_06_vstat_vis_0_Coef.axi.jpg'
+++ Writing one 2770x150 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > QC_allMice.average.stim/media/qc_06_vstat_vis_0_Coef.sag.jpg'
+
+AFNI QUITTs!
+
++++ Command Echo:
+   afni -q -no1D -noplugins -no_detach -com SWITCH_UNDERLAY tmp_ulay.nii -com SWITCH_OVERLAY  tmp_olay.nii -com SEE_OVERLAY     + -com OPEN_WINDOW sagittalimage opacity=9 mont=7x1:14:1:black crop=0:0,0:0  -com OPEN_WINDOW coronalimage  opacity=9 mont=7x1:28:1:black crop=0:0,0:0  -com OPEN_WINDOW axialimage    opacity=9 mont=7x1:10:1:black crop=0:0,0:0  -com SET_PBAR_ALL    -99 1 Reds_and_Blues_Inv -com PBAR_SAVEIM QC_allMice.average.stim/media/qc_06_vstat_vis_0_Coef.pbar.jpg dim=64x512H -com SET_SUBBRICKS   0 1 2 -com SET_ULAY_RANGE A.all 1124061.322594 12982813.425217 -com SET_FUNC_RANGE  1.334006 -com SET_THRESHNEW   3.34303 * -com SET_FUNC_ALPHA  Yes -com SET_FUNC_BOXED  Yes -com SET_FUNC_RESAM  NN.NN -com SET_XHAIRS      OFF -com SET_XHAIR_GAP   -1 -com SET_DICOM_XYZ 0.041 -0.0105 0.009 -com SAVE_JPEG axialimage    QC_allMice.average.stim/media/qc_06_vstat_vis_0_Coef.axi blowup=2 -com SAVE_JPEG sagittalimage QC_allMice.average.stim/media/qc_06_vstat_vis_0_Coef.sag blowup=2 -com QUITT QC_allMice.average.stim/media/__tmp_chauf_fVy8zOftOIR 
+
+
++* Removing temporary image directory 'QC_allMice.average.stim/media/__tmp_chauf_fVy8zOftOIR'.
+
+[1]  + Done                          Xvfb :410 -screen 0 1024x768x24
+
+++ DONE (good exit)
+   see: QC_allMice.average.stim/media/qc_06_vstat_vis_0_Coef*
+
+++ 1dplot: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: RWC et al.
+[7m** FATAL ERROR:[0m Can't read input file '' iarg=12
+** Program compile date = Jan 24 2023
+++ 1dplot: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: RWC et al.
+[7m** FATAL ERROR:[0m Can't read input file '' iarg=12
+** Program compile date = Jan 24 2023
+++ 1dplot: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: RWC et al.
+++ 3dGrayplot: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+ + Loading dataset ./errts.allMice.average.stim+orig.HEAD
+ + Number of voxels in mask = 334346
+ +   RMS norming time series
+ +   Computing PV order for mask partition #1 - 334346 voxels
+ +   Computing mri_vec_to_pvmap
+ +  PVpair: nn=205 < mm=334346 -- using 36 threads to compute A matrix
+ +   start sums using column/voxel ii=10000
+ +   start sums using column/voxel ii=20000
+ +   start sums using column/voxel ii=30000
+ +   start sums using column/voxel ii=40000
+ +   start sums using column/voxel ii=50000
+ +   start sums using column/voxel ii=60000
+ +   start sums using column/voxel ii=70000
+ +   start sums using column/voxel ii=80000
+ +   start sums using column/voxel ii=90000
+ +   start sums using column/voxel ii=100000
+ +   start sums using column/voxel ii=110000
+ +   start sums using column/voxel ii=120000
+ +   start sums using column/voxel ii=130000
+ +   start sums using column/voxel ii=140000
+ +   start sums using column/voxel ii=150000
+ +   start sums using column/voxel ii=160000
+ +   start sums using column/voxel ii=170000
+ +   start sums using column/voxel ii=180000
+ +   start sums using column/voxel ii=190000
+ +   start sums using column/voxel ii=200000
+ +   start sums using column/voxel ii=210000
+ +   start sums using column/voxel ii=220000
+ +   start sums using column/voxel ii=230000
+ +   start sums using column/voxel ii=240000
+ +   start sums using column/voxel ii=250000
+ +   start sums using column/voxel ii=260000
+ +   start sums using column/voxel ii=270000
+ +   start sums using column/voxel ii=280000
+ +   start sums using column/voxel ii=290000
+ +   start sums using column/voxel ii=300000
+ +   start sums using column/voxel ii=310000
+ +   start sums using column/voxel ii=320000
+ +   start sums using column/voxel ii=330000
+ +    first 2 singular values = 3505.56 1602.79
+ +   Sorting mri_vec_to_pvmap
+ +   Putting sorted vectors back into vectim
+ + 3dGrayplot: Elapsed = 2807.9 s
+++ pbar name has known extension: jpg
+++ My command:
+   @chauffeur_afni -ulay mask_import_100mask+orig.HEAD -olay mask_import_100mask+orig.HEAD -box_focus_slices AMASK_FOCUS_OLAY -cbar gray_scale -func_range 3.29 -blowup 1 -set_subbricks 0 0 0 -opacity 9 -pbar_saveim QC_allMice.average.stim/media/qc_10_mot_grayplot.pbar.jpg -pbar_comm_range for normal distr, bounds of 0.001 prob tail -prefix __tmp_ZXCV_img -save_ftype JPEG -montx 1 -monty 1 -set_xhairs OFF -label_mode 1 -label_size 4 -no_cor -do_clean
+
+++ Using AFNI ver : AFNI_23.0.02
+++ chauffeur ver  : 6.52
+
+------------------ start of optionizing ------------------
+
+++ Found input file:   mask_import_100mask+orig.HEAD
+++ Found input file:   mask_import_100mask+orig.HEAD
+++ Using blowup factor: 1
+++ Using opacity:  9
+++ Making temporary work directory to copy vis files: ./__tmp_chauf_nS2Fo4477sz
+++ Converted 0 to labels
+++ Final subbrick indices: 0 0 0
+++ Copy ulay to visualize (volumetric) within user's range:
+++ Ulay to be visualized within user range:
+  [0%, 98%] -> [0.000000, 1.000000]
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ././__tmp_chauf_nS2Fo4477sz/tmp_ulay.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ././__tmp_chauf_nS2Fo4477sz/tmp_olay.nii
+++ User-entered function range value value (3.29)
+++ Dimensions (xyzt): 102 197 75 1
+++ (initial) Slice spacing ordered (x,y,z) is:  102 197 75
+++ 3dAutomask: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: Emperor Zhark
+++ 3dAutobox: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Auto bbox: x=0..101  y=0..196  z=0..74
+++ THD_zeropad: all pad values are zero - just copying dataset
+++ 3dAutobox: output dataset = ./__tmp_chauf_nS2Fo4477sz/ulay_box_0.nii
+++ 3dmaskdump: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Executing 3dcalc()
+ argv[0]=3dcalc argv[1]=-a argv[2]=./__tmp_chauf_nS2Fo4477sz/ulay_box_0.nii[0] argv[3]=-expr argv[4]=a argv[5]=-byte argv[6]=-session argv[7]=/home/scratch argv[8]=-prefix argv[9]=3dcalc_AFN_HM_OFFMkKhV3h7H0s6bs3A argv[10]=-verbose
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Computing sub-brick 0
+++ Scaling output to type byte brick(s)
+++ Sub-brick 0: no scale factor
+++ Computing output statistics
+++ 1507050 voxels in the entire dataset (no mask)
+++ 1 voxels in the boxes and/or balls
+++ Using only the boxes+balls mask
+++ How many coors? 3
+++ Will have the ref box central coors : SET_DICOM_XYZ 0.041 -0.0105 0.009
+++ Will have the ref box central gapord: 102 197 75
+
+------------------- end of optionizing -------------------
+
+ -- trying to start Xvfb :40 
+[1] 202433
++/local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_AD/allMice.average.stim.results/__tmp_chauf_nS2Fo4477sz++ Writing palette image to QC_allMice.average.stim/media/qc_10_mot_grayplot.pbar.jpg
+++ Writing one 102x197 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > ./__tmp_ZXCV_img.axi.jpg'
+++ Writing one 197x75 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > ./__tmp_ZXCV_img.sag.jpg'
+
+AFNI QUITTs!
+
++++ Command Echo:
+   afni -q -no1D -noplugins -no_detach -com SWITCH_UNDERLAY tmp_ulay.nii -com SWITCH_OVERLAY  tmp_olay.nii -com SEE_OVERLAY     + -com OPEN_WINDOW sagittalimage opacity=9 mont=1x1:102:0:black crop=0:0,0:0  -com OPEN_WINDOW coronalimage  opacity=9 mont=1x1:197:0:black crop=0:0,0:0  -com OPEN_WINDOW axialimage    opacity=9 mont=1x1:75:0:black crop=0:0,0:0  -com SET_PBAR_ALL    -99 1 gray_scale -com PBAR_SAVEIM QC_allMice.average.stim/media/qc_10_mot_grayplot.pbar.jpg dim=64x512H -com SET_SUBBRICKS   0 0 0 -com SET_ULAY_RANGE A.all 0.000000 1.000000 -com SET_FUNC_RANGE  3.29 -com SET_THRESHNEW   0 * -com SET_FUNC_ALPHA  No -com SET_FUNC_BOXED  No -com SET_FUNC_RESAM  NN.NN -com SET_XHAIRS      OFF -com SET_XHAIR_GAP   -1 -com SET_DICOM_XYZ 0.041 -0.0105 0.009 -com SAVE_JPEG axialimage    ./__tmp_ZXCV_img.axi blowup=1 -com SAVE_JPEG sagittalimage ./__tmp_ZXCV_img.sag blowup=1 -com QUITT ./__tmp_chauf_nS2Fo4477sz 
+
+
++* Removing temporary image directory './__tmp_chauf_nS2Fo4477sz'.
+
+[1]    Done                          Xvfb :40 -screen 0 1024x768x24
+
+++ DONE (good exit)
+   see: ./__tmp_ZXCV_img*
+
+++ 1dplot: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: RWC et al.
+++ 1dplot: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: RWC et al.
+++ Check summary of degrees of freedom in: QC_allMice.average.stim/media/qc_13_regr_df.dat
+++ olay_alpha has known value: Yes
+++ pbar name has known extension: jpg
+++ My command:
+   @chauffeur_afni -ulay anat_final.allMice.average.stim+orig.HEAD -box_focus_slices anat_final.allMice.average.stim+orig.HEAD -olay corr_brain+orig.HEAD -cbar Reds_and_Blues_Inv -ulay_range 0% 120% -func_range 0.6 -thr_olay 0.3 -olay_alpha Yes -olay_boxed Yes -set_subbricks 0 0 0 -opacity 9 -pbar_saveim QC_allMice.average.stim/media/qc_14_regr_corr_errts.pbar.jpg -pbar_comm_range Pearson r -pbar_comm_thr alpha+boxed on -prefix QC_allMice.average.stim/media/qc_14_regr_corr_errts -save_ftype JPEG -montx 7 -monty 1 -montgap 1 -montcolor black -set_xhairs OFF -label_mode 1 -label_size 4 -no_cor -do_clean
+
+++ Using AFNI ver : AFNI_23.0.02
+++ chauffeur ver  : 6.52
+
+------------------ start of optionizing ------------------
+
+++ Found input file:   anat_final.allMice.average.stim+orig.HEAD
+++ Found input file:   corr_brain+orig.HEAD
+++ Found focus refbox file:   anat_final.allMice.average.stim+orig.HEAD
+++ Using blowup factor: 2
+++ Using opacity:  9
+++ Making temporary work directory to copy vis files: QC_allMice.average.stim/media/__tmp_chauf_tZToPtXDmrH
+++ Converted 0 to labels
+++ Final subbrick indices: 0 0 0
+++ Copy ulay to visualize (volumetric) within user's range:
+++ Ulay range calc for >100%ile ulay max:
+   calculating 98%ile value, and then
+   multiplying it by a scale factor = 1.22448,
+   in order to produce the 98%ile value
+++ Ulay to be visualized within user range:
+  [0%, 120%] -> [1124061.322594, 12982813.425217]
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__tmp_chauf_tZToPtXDmrH/tmp_ulay.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__tmp_chauf_tZToPtXDmrH/tmp_olay.nii
+++ User-entered function range value value (0.6)
+++ Dimensions (xyzt): 102 197 75 1
+++ (initial) Slice spacing ordered (x,y,z) is:  14 28 10
+++ 3dAutobox: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Auto bbox: x=0..101  y=0..196  z=0..74
+++ THD_zeropad: all pad values are zero - just copying dataset
+++ 3dAutobox: output dataset = QC_allMice.average.stim/media/__tmp_chauf_tZToPtXDmrH/ulay_box_0.nii
+++ 3dmaskdump: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Executing 3dcalc()
+ argv[0]=3dcalc argv[1]=-a argv[2]=QC_allMice.average.stim/media/__tmp_chauf_tZToPtXDmrH/ulay_box_0.nii[0] argv[3]=-expr argv[4]=a argv[5]=-byte argv[6]=-session argv[7]=/home/scratch argv[8]=-prefix argv[9]=3dcalc_AFN_ANdyLtZl2PSZuqenvxwLNg argv[10]=-verbose
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Computing sub-brick 0
+++ Scaling output to type byte brick(s)
+++ Sub-brick 0 scale factor = 0.000019
+++ Computing output statistics
+++ Output dataset /home/scratch/3dcalc_AFN_ANdyLtZl2PSZuqenvxwLNg+orig.BRIK
+++ 1507050 voxels in the entire dataset (no mask)
+++ 1 voxels in the boxes and/or balls
+++ Using only the boxes+balls mask
+++ How many coors? 3
+++ Will have the ref box central coors : SET_DICOM_XYZ 0.041 -0.0105 0.009
+++ Will have the ref box central gapord: 14 28 10
+
+------------------- end of optionizing -------------------
+
+ -- trying to start Xvfb :78 
+[1] 202769
++/local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_AD/allMice.average.stim.results/QC_allMice.average.stim/media/__tmp_chauf_tZToPtXDmrH++ Writing palette image to QC_allMice.average.stim/media/qc_14_regr_corr_errts.pbar.jpg
+++ Writing one 1440x394 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > QC_allMice.average.stim/media/qc_14_regr_corr_errts.axi.jpg'
+++ Writing one 2770x150 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > QC_allMice.average.stim/media/qc_14_regr_corr_errts.sag.jpg'
+
+AFNI QUITTs!
+
++++ Command Echo:
+   afni -q -no1D -noplugins -no_detach -com SWITCH_UNDERLAY tmp_ulay.nii -com SWITCH_OVERLAY  tmp_olay.nii -com SEE_OVERLAY     + -com OPEN_WINDOW sagittalimage opacity=9 mont=7x1:14:1:black crop=0:0,0:0  -com OPEN_WINDOW coronalimage  opacity=9 mont=7x1:28:1:black crop=0:0,0:0  -com OPEN_WINDOW axialimage    opacity=9 mont=7x1:10:1:black crop=0:0,0:0  -com SET_PBAR_ALL    -99 1 Reds_and_Blues_Inv -com PBAR_SAVEIM QC_allMice.average.stim/media/qc_14_regr_corr_errts.pbar.jpg dim=64x512H -com SET_SUBBRICKS   0 0 0 -com SET_ULAY_RANGE A.all 1124061.322594 12982813.425217 -com SET_FUNC_RANGE  0.6 -com SET_THRESHNEW   0.3 * -com SET_FUNC_ALPHA  Yes -com SET_FUNC_BOXED  Yes -com SET_FUNC_RESAM  NN.NN -com SET_XHAIRS      OFF -com SET_XHAIR_GAP   -1 -com SET_DICOM_XYZ 0.041 -0.0105 0.009 -com SAVE_JPEG axialimage    QC_allMice.average.stim/media/qc_14_regr_corr_errts.axi blowup=2 -com SAVE_JPEG sagittalimage QC_allMice.average.stim/media/qc_14_regr_corr_errts.sag blowup=2 -com QUITT QC_allMice.average.stim/media/__tmp_chauf_tZToPtXDmrH 
+
+
++* Removing temporary image directory 'QC_allMice.average.stim/media/__tmp_chauf_tZToPtXDmrH'.
+
+[1]  + Done                          Xvfb :78 -screen 0 1024x768x24
+
+++ DONE (good exit)
+   see: QC_allMice.average.stim/media/qc_14_regr_corr_errts*
+
+++ Prepare for running adjunct_apqc_tsnr_general (ver = 1.21)
+++ MODE: 10
+++ olay_alpha has known value: No
+*+ Setting pbar file extension: jpg
+
+
+++ My command:
+   @chauffeur_afni -ulay anat_final.allMice.average.stim+orig.HEAD -olay TSNR.allMice.average.stim+orig.HEAD -ulay_range 0% 120% -func_range 0 -box_focus_slices anat_final.allMice.average.stim+orig.HEAD -set_subbricks 0 0 0 -pbar_posonly -blowup 2 -cbar   0=red  0=oran-red  0=orange  0=oran-yell  0=yell-oran  0=yellow  0=lt-blue2  0=blue  0=none -cbar_ncolors 8 -cbar_topval EMPTY -opacity 4 -olay_alpha No -olay_boxed No -thr_olay 0 -pbar_saveim QC_allMice.average.stim/media/qc_15_regr_tsnr_fin.pbar -pbar_comm_range 95%ile in mask -pbar_comm_gen  cbar: hot color range (5-95%ile TSNR in mask):   0 -   0 -prefix QC_allMice.average.stim/media/qc_15_regr_tsnr_fin -save_ftype JPEG -montx 7 -monty 1 -montgap 1 -montcolor black -set_xhairs OFF -label_mode 1 -label_size 4 -no_cor -do_clean -pass -pass
+
+++ Using AFNI ver : AFNI_23.0.02
+++ chauffeur ver  : 6.52
+
+------------------ start of optionizing ------------------
+
+++ Found input file:   anat_final.allMice.average.stim+orig.HEAD
+++ Found input file:   TSNR.allMice.average.stim+orig.HEAD
+++ Found focus refbox file:   anat_final.allMice.average.stim+orig.HEAD
+++ Using blowup factor: 2
+++ Using opacity:  4
+++ Making temporary work directory to copy vis files: QC_allMice.average.stim/media/__tmp_chauf_PbnMjbqogie
+++ Converted 0 to labels
+++ Final subbrick indices: 0 0 0
+++ Copy ulay to visualize (volumetric) within user's range:
+++ Ulay range calc for >100%ile ulay max:
+   calculating 98%ile value, and then
+   multiplying it by a scale factor = 1.22448,
+   in order to produce the 98%ile value
+++ Ulay to be visualized within user range:
+  [0%, 120%] -> [1124061.322594, 12982813.425217]
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__tmp_chauf_PbnMjbqogie/tmp_ulay.nii
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./QC_allMice.average.stim/media/__tmp_chauf_PbnMjbqogie/tmp_olay.nii
+++ User-entered function range value value (0)
+++ Dimensions (xyzt): 102 197 75 1
+++ (initial) Slice spacing ordered (x,y,z) is:  14 28 10
+++ 3dAutobox: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Auto bbox: x=0..101  y=0..196  z=0..74
+++ THD_zeropad: all pad values are zero - just copying dataset
+++ 3dAutobox: output dataset = QC_allMice.average.stim/media/__tmp_chauf_PbnMjbqogie/ulay_box_0.nii
+++ 3dmaskdump: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Executing 3dcalc()
+ argv[0]=3dcalc argv[1]=-a argv[2]=QC_allMice.average.stim/media/__tmp_chauf_PbnMjbqogie/ulay_box_0.nii[0] argv[3]=-expr argv[4]=a argv[5]=-byte argv[6]=-session argv[7]=/home/scratch argv[8]=-prefix argv[9]=3dcalc_AFN_0Vfpd_kHE7k6A2_Hcu4RQw argv[10]=-verbose
+++ 3dcalc: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+++ Authored by: A cast of thousands
+++ Computing sub-brick 0
+++ Scaling output to type byte brick(s)
+++ Sub-brick 0 scale factor = 0.000019
+++ Computing output statistics
+++ Output dataset /home/scratch/3dcalc_AFN_0Vfpd_kHE7k6A2_Hcu4RQw+orig.BRIK
+++ 1507050 voxels in the entire dataset (no mask)
+++ 1 voxels in the boxes and/or balls
+++ Using only the boxes+balls mask
+++ How many coors? 3
+++ Will have the ref box central coors : SET_DICOM_XYZ 0.041 -0.0105 0.009
+++ Will have the ref box central gapord: 14 28 10
+
+------------------- end of optionizing -------------------
+
+ -- trying to start Xvfb :972 
+[1] 203152
++/local_mount/space/yulab/4/users/Xiaochen/Ave/average_all_AD/allMice.average.stim.results/QC_allMice.average.stim/media/__tmp_chauf_PbnMjbqogie[7m*+ WARNING:[0m Bad drive AFNI result from 'SET_PBAR_ALL    +8    0=red  0=oran-red  0=orange  0=oran-yell  0=yell-oran  0=yellow  0=lt-blue2  0=blue  0=none'
+++ Writing palette image to QC_allMice.average.stim/media/qc_15_regr_tsnr_fin.pbar.jpg
+++ Writing one 1440x394 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > QC_allMice.average.stim/media/qc_15_regr_tsnr_fin.axi.jpg'
+++ Writing one 2770x150 image to filter '/local_mount/space/yulab/1/users/AFNI/cjpeg -quality 95 > QC_allMice.average.stim/media/qc_15_regr_tsnr_fin.sag.jpg'
+
+AFNI QUITTs!
+
++++ Command Echo:
+   afni -q -no1D -noplugins -no_detach -com SWITCH_UNDERLAY tmp_ulay.nii -com SWITCH_OVERLAY  tmp_olay.nii -com SEE_OVERLAY     + -com OPEN_WINDOW sagittalimage opacity=4 mont=7x1:14:1:black crop=0:0,0:0  -com OPEN_WINDOW coronalimage  opacity=4 mont=7x1:28:1:black crop=0:0,0:0  -com OPEN_WINDOW axialimage    opacity=4 mont=7x1:10:1:black crop=0:0,0:0  -com SET_PBAR_ALL    +8    0=red  0=oran-red  0=orange  0=oran-yell  0=yell-oran  0=yellow  0=lt-blue2  0=blue  0=none -com PBAR_SAVEIM QC_allMice.average.stim/media/qc_15_regr_tsnr_fin.pbar.jpg dim=64x512H -com SET_SUBBRICKS   0 0 0 -com SET_ULAY_RANGE A.all 1124061.322594 12982813.425217 -com SET_FUNC_RANGE  0 -com SET_THRESHNEW   0 * -com SET_FUNC_ALPHA  No -com SET_FUNC_BOXED  No -com SET_FUNC_RESAM  NN.NN -com SET_XHAIRS      OFF -com SET_XHAIR_GAP   -1 -com SET_DICOM_XYZ 0.041 -0.0105 0.009 -com SAVE_JPEG axialimage    QC_allMice.average.stim/media/qc_15_regr_tsnr_fin.axi blowup=2 -com SAVE_JPEG sagittalimage QC_allMice.average.stim/media/qc_15_regr_tsnr_fin.sag blowup=2 -com QUITT QC_allMice.average.stim/media/__tmp_chauf_PbnMjbqogie 
+
+
++* Removing temporary image directory 'QC_allMice.average.stim/media/__tmp_chauf_PbnMjbqogie'.
+
+[1]  + Done                          Xvfb :972 -screen 0 1024x768x24
+
+++ DONE (good exit)
+   see: QC_allMice.average.stim/media/qc_15_regr_tsnr_fin*
+
+++ Check for corr matrix warnings in: QC_allMice.average.stim/media/qc_16_warns_xmat.dat
+++ Check EPI variance lines (vlines) in: vlines.pb00.tcat
+++ Check basic summary quants from proc in: QC_allMice.average.stim/media/qc_19_qsumm_ssrev.dat
+
+
+# +++++++++++ Check output of @ss_review_basic +++++++++++ #
+
+
+subject ID                : allMice.average.stim
+AFNI version              : AFNI_23.0.02
+AFNI package              : linux_centos_7_64
+TR                        : 2.0
+TRs removed (per run)     : 0
+num stim classes provided : 1
+final anatomy dset        : anat_final.allMice.average.stim+orig.HEAD
+final stats dset          : stats.allMice.average.stim+orig.HEAD
+orig voxel counts         : 102	197	75
+orig voxel resolution     : 0.100000	0.100000	0.100000
+orig volume center        : -0.009000	-0.010500	0.009000
+final voxel resolution    : 0.100000	0.100000	0.100000
+
+motion limit              : 0.3
+num TRs above mot limit   : 172
+average motion (per TR)   : 0.719637
+max motion displacement   : 3.09761
+average outlier frac (TR) : 0.000631561
+
+num runs found            : 1
+num TRs per run           : 205
+TRs total                 : 205
+degrees of freedom used   : 17
+degrees of freedom left   : 188
+final DF fraction         : 0.917073
+
+num regs of interest      : 1
+num TRs per stim          : 90
+ave mot per sresp         : 0.754750
+
+TSNR average              : 0.000429391
+global correlation (GCOR) : 0.04252
+anat/EPI mask Dice coef   : 0.294306
+maximum F-stat (masked)   : 200.721
+blur estimates (ACF)      : 0.624414 0.228964 1.29991
+blur estimates (FWHM)     : 0 0 0
+

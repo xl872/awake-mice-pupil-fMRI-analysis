@@ -1,0 +1,38 @@
+
+subject ID                : allMice.average.stim
+AFNI version              : AFNI_23.0.02
+AFNI package              : linux_centos_7_64
+TR                        : 2.0
+TRs removed (per run)     : 0
+num stim classes provided : 1
+final anatomy dset        : anat_final.allMice.average.stim+orig.HEAD
+final stats dset          : stats.allMice.average.stim+orig.HEAD
+orig voxel counts         : 102	197	75
+orig voxel resolution     : 0.100000	0.100000	0.100000
+orig volume center        : -0.009000	-0.010500	0.009000
+final voxel resolution    : 0.100000	0.100000	0.100000
+
+motion limit              : 0.3
+num TRs above mot limit   : 158
+average motion (per TR)   : 0.685005
+max motion displacement   : 3.11868
+average outlier frac (TR) : 0.000602634
+
+num runs found            : 1
+num TRs per run           : 205
+TRs total                 : 205
+degrees of freedom used   : 17
+degrees of freedom left   : 188
+final DF fraction         : 0.917073
+
+num regs of interest      : 1
+num TRs per stim          : 90
+ave mot per sresp         : 0.722000
+
+TSNR average              : 0.00516556
+global correlation (GCOR) : 0.0776279
+anat/EPI mask Dice coef   : 0.302917
+maximum F-stat (masked)   : 305.772
+blur estimates (ACF)      : 0.587816 0.225293 1.08958
+blur estimates (FWHM)     : 0 0 0
+

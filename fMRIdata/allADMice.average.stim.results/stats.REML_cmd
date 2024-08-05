@@ -1,0 +1,6 @@
+# 3dDeconvolve -input pb03.allMice.average.stim.r01.blur+orig.HEAD -mask mask_import_100mask+orig -ortvec motion_demean.1D mot_demean -ortvec motion_deriv.1D mot_deriv -polort 3 -float -num_stimts 1 -stim_times 1 stimuli/vis_stim_BLOCK.txt 'BLOCK(4,1)' -stim_label 1 vis -GOFORIT 10 -fout -tout -x1D X.xmat.1D -xjpeg X.jpg -errts errts.allMice.average.stim -bucket stats.allMice.average.stim
+
+3dREMLfit -matrix X.xmat.1D -input pb03.allMice.average.stim.r01.blur+orig.HEAD \
+ -mask mask_import_100mask+orig -fout -tout \
+ -Rbuck stats.allMice.average.stim_REML -Rvar stats.allMice.average.stim_REMLvar \
+ -Rerrts errts.allMice.average.stim_REML -verb $*

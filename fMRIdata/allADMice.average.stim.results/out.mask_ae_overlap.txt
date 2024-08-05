@@ -1,0 +1,4 @@
+++ 3dABoverlap: AFNI version=AFNI_23.0.02 (Jan 24 2023) [64-bit]
+#A=./full_mask.allMice.average.stim+orig.BRIK  B=./mask_anat.allMice.average.stim+orig.BRIK
+#A           #B           #(A uni B)   #(A int B)   #(A \ B)     #(B \ A)     %(A \ B)    %(B \ A)    Rx(B/A)    Ry(B/A)    Rz(B/A)
+260031       1507050      1507050      260031       0            1247019       0.0000     82.7457     1.9682     7.5077     2.5538

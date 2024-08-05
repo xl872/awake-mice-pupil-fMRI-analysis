@@ -1,0 +1,116 @@
+
+type = string-attribute
+name = HISTORY_NOTE
+count = 369
+'[xl872@yulab.nmr.mgh.harvard.edu: Wed May  3 10:55:29 2023] {AFNI_23.0.02:linux_centos_7_64} 3dDespike -NEW -nomask -prefix pb01.allMice.average.stim.r01.despike pb00.allMice.average.stim.r01.tcat+orig\n[xl872@yulab.nmr.mgh.harvard.edu: Wed May  3 10:55:37 2023] {AFNI_23.0.02:linux_centos_7_64} 3dbucket -prefix vr_base 'pb01.allMice.average.stim.r01.despike+orig[2]'~
+
+type = string-attribute
+name = TYPESTRING
+count = 15
+'3DIM_HEAD_ANAT~
+
+type = string-attribute
+name = IDCODE_STRING
+count = 27
+'AFN_3ebuUQz1p7O6RVao22f5YA~
+
+type = string-attribute
+name = IDCODE_DATE
+count = 25
+'Wed May  3 10:55:37 2023~
+
+type = integer-attribute
+name = SCENE_DATA
+count = 8
+ 0 11 0 -999 -999
+ -999 -999 -999
+
+type = string-attribute
+name = LABEL_1
+count = 5
+'zyxt~
+
+type = string-attribute
+name = LABEL_2
+count = 5
+'zyxt~
+
+type = string-attribute
+name = DATASET_NAME
+count = 5
+'zyxt~
+
+type = integer-attribute
+name = ORIENT_SPECIFIC
+count = 3
+ 1 2 4
+
+type  = float-attribute
+name  = ORIGIN
+count = 3
+          5.041         9.7895         -3.691
+
+type  = float-attribute
+name  = DELTA
+count = 3
+           -0.1           -0.1            0.1
+
+type  = float-attribute
+name  = IJK_TO_DICOM
+count = 12
+           -0.1              0              0          5.041              0
+           -0.1              0         9.7895              0              0
+            0.1         -3.691
+
+type  = float-attribute
+name  = IJK_TO_DICOM_REAL
+count = 12
+           -0.1              0              0          5.041              0
+           -0.1              0         9.7895              0              0
+            0.1         -3.691
+
+type  = float-attribute
+name  = BRICK_STATS
+count = 2
+      -6.365059       6.726568
+
+type = integer-attribute
+name = DATASET_RANK
+count = 8
+ 3 1 0 0 0
+ 0 0 0
+
+type = integer-attribute
+name = DATASET_DIMENSIONS
+count = 5
+ 102 197 75 0 0
+
+type = integer-attribute
+name = BRICK_TYPES
+count = 1
+ 3
+
+type  = float-attribute
+name  = BRICK_FLOAT_FACS
+count = 1
+              0
+
+type = string-attribute
+name = BRICK_LABS
+count = 3
+'#2~
+
+type = string-attribute
+name = TEMPLATE_SPACE
+count = 5
+'ORIG~
+
+type = integer-attribute
+name = INT_CMAP
+count = 1
+ 0
+
+type = string-attribute
+name = BYTEORDER_STRING
+count = 10
+'LSB_FIRST~
